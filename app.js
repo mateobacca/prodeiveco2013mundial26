@@ -19,7 +19,9 @@ async function cargarCSV(nombreHoja){
   const filas = texto
     .trim()
     .split("\n")
-    .map(f=>f.split(","));
+    .map(f =>
+      f.split(",").map(celda => celda.trim().replace(/^"|"$/g, ""))
+    );
 
   return filas;
 }
@@ -54,11 +56,13 @@ function calcularPuntos(datos){
   return puntos;
 }
 
-function tablaRanking(puntos){
+function tablaRanking(puntos, opciones = {}){
 
   const ranking =
     Object.entries(puntos)
       .sort((a,b)=>b[1]-a[1]);
+
+  const maxPuntos = ranking.length ? ranking[0][1] : 0;
 
   let html =
   `<table>
@@ -68,13 +72,23 @@ function tablaRanking(puntos){
       <th>Puntos</th>
     </tr>`;
 
-  ranking.forEach((r,i)=>{
+  ranking.forEach(([jugador, pts])=>{
+
+    // posición de competición: los empatados comparten puesto (1,1,1,4...)
+    const pos = ranking.findIndex(r=>r[1]===pts) + 1;
+
+    // resalta el podio (top 3 puestos)
+    const clasePodio = pos <= 3 ? ` class="top-${pos}"` : "";
+
+    // ícono para el/los líderes (mayor puntaje, > 0): 🥇 fecha, 🏆 general
+    const esLider = opciones.iconoLider && pts === maxPuntos && pts > 0;
+    const icono = esLider ? ` ${opciones.iconoLider}` : "";
 
     html += `
-      <tr>
-        <td>${i+1}</td>
-        <td>${r[0]}</td>
-        <td>${r[1]}</td>
+      <tr${clasePodio}>
+        <td>${pos}</td>
+        <td>${jugador}${icono}</td>
+        <td>${pts}</td>
       </tr>
     `;
 
@@ -107,7 +121,7 @@ async function cargarGeneral(){
 
   document.getElementById("general")
     .innerHTML =
-      tablaRanking(general);
+      tablaRanking(general, { iconoLider: "🏆" });
 }
 
 async function cargarFecha(nombre){
@@ -120,7 +134,7 @@ async function cargarFecha(nombre){
 
   document.getElementById("fechaRanking")
     .innerHTML =
-      tablaRanking(puntos);
+      tablaRanking(puntos, { iconoLider: "🥇" });
 
   let html = "<table>";
 
@@ -151,6 +165,8 @@ fila.forEach((celda, colIndex) => {
         }else{
           clase = "bad";
         }
+      }else{
+        clase = "pending";
       }
     }
 

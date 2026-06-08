@@ -8,32 +8,54 @@
 </head>
 <body>
 
-<h1>🏆 Prode Mundial</h1>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <span class="brand__logo">🏆</span>
+        <div>
+          <h1 class="brand__title">Prode Mundial</h1>
+          <p class="brand__subtitle">Pronósticos · Mundial 2026</p>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<section>
-  <h2>Tabla General</h2>
-  <div id="general"></div>
-</section>
+  <main class="wrap">
 
-<section>
-  <h2>Ranking por Fecha</h2>
+    <section class="card">
+      <div class="card__head">
+        <h2 class="card__title">Tabla General</h2>
+        <span class="card__hint">Acumulado de todas las fechas</span>
+      </div>
+      <div id="general" class="tabla-scroll"></div>
+    </section>
 
-  <select id="fechaSelect">
-    <option>Fecha 1</option>
-    <option>Fecha 2</option>
-    <option>Fecha 3</option>
-    <option>Play Off</option>
-  </select>
+    <section class="card">
+      <div class="card__head">
+        <h2 class="card__title">Ranking por Fecha</h2>
+        <div class="select-wrap">
+          <select id="fechaSelect" class="select">
+            <option>Fecha 1</option>
+            <option>Fecha 2</option>
+            <option>Fecha 3</option>
+            <option>Play Off</option>
+          </select>
+        </div>
+      </div>
+      <div id="fechaRanking" class="tabla-scroll"></div>
+    </section>
 
-  <div id="fechaRanking"></div>
-</section>
+    <section class="card">
+      <div class="card__head">
+        <h2 class="card__title">Pronósticos</h2>
+        <span class="card__hint">Verde = acierto · Rojo = error</span>
+      </div>
+      <div id="pronosticos" class="tabla-scroll"></div>
+    </section>
 
-<section>
-  <h2>Pronósticos</h2>
-  <div id="pronosticos"></div>
-</section>
+  </main>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>

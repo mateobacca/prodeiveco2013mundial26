@@ -1,40 +1,329 @@
+/* ============================================================
+   Prode Mundial — mini design system (vanilla, sin build)
+   ============================================================ */
+
+/* ---------------------------------------------------------
+   1. Tokens
+   --------------------------------------------------------- */
+:root{
+  /* Tipografía del sistema (sin CDN) */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu,
+          Cantarell, "Helvetica Neue", Arial, sans-serif;
+
+  /* Neutros */
+  --bg:        #eceff3;
+  --surface:   #ffffff;
+  --surface-2: #f4f7fa;   /* zebra */
+  --ink:       #0f172a;
+  --ink-soft:  #64748b;
+  --line:      #e6eaf0;
+  --line-2:    #d2dae3;
+
+  /* Acento deportivo: verde "cancha" */
+  --brand:    #0f766e;
+  --brand-2:  #115e59;
+  --brand-bg: #ecfdf5;
+
+  /* Header de tablas (oscuro) */
+  --th-bg:  #111827;
+  --th-ink: #e5e7eb;
+
+  /* Estados (fondo suave + texto de alto contraste) */
+  --ok-bg:   #d4f4dd;  --ok-ink:   #14532d;
+  --bad-bg:  #fbdada;  --bad-ink:  #7f1d1d;
+  --pend-bg: #eef1f5;  --pend-ink: #6b7280;
+
+  /* Podio */
+  --gold:   #d4a017;  --gold-bg:   #fdf6e0;
+  --silver: #8a97a8;  --silver-bg: #f2f5f8;
+  --bronze: #b5742a;  --bronze-bg: #fbeede;
+
+  /* Espaciado */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+
+  /* Radios */
+  --r-sm:8px; --r:12px; --r-lg:18px;
+
+  /* Sombras */
+  --sh-sm: 0 1px 2px rgba(15,23,42,.05), 0 1px 1px rgba(15,23,42,.04);
+  --sh:    0 8px 24px -10px rgba(15,23,42,.25);
+
+  /* Layout */
+  --maxw: 920px;
+}
+
+/* ---------------------------------------------------------
+   2. Reset suave
+   --------------------------------------------------------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
 body{
-    font-family: Arial, sans-serif;
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
+  margin:0;
+  font-family:var(--font);
+  font-size:15px;
+  line-height:1.45;
+  color:var(--ink);
+  background:radial-gradient(1100px 520px at 50% -240px,#ffffff 0%,var(--bg) 62%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
+/* ---------------------------------------------------------
+   3. Layout
+   --------------------------------------------------------- */
+.wrap{
+  width:100%;
+  max-width:var(--maxw);
+  margin-inline:auto;
+  padding-inline:var(--sp-4);
+}
+main.wrap{
+  padding-block:var(--sp-5) var(--sp-6);
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-5);
 }
 
-th,td{
-    border:1px solid #ddd;
-    padding:8px;
-    text-align:center;
+/* ---------------------------------------------------------
+   4. Header / marca
+   --------------------------------------------------------- */
+.site-header{
+  background:linear-gradient(135deg,#0b3b39 0%,#0f766e 55%,#115e59 100%);
+  color:#fff;
+  box-shadow:var(--sh);
+}
+.site-header .wrap{
+  display:flex;
+  align-items:center;
+  padding-block:var(--sp-4);
+}
+.brand{ display:flex; align-items:center; gap:var(--sp-3); }
+.brand__logo{
+  font-size:2rem;
+  line-height:1;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.3));
+}
+.brand__title{
+  margin:0;
+  font-size:clamp(1.35rem,4.5vw,1.9rem);
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+.brand__subtitle{
+  margin:3px 0 0;
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.72);
 }
 
-th{
-    background:#222;
-    color:white;
+/* ---------------------------------------------------------
+   5. Card / sección
+   --------------------------------------------------------- */
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--sh-sm);
+  overflow:hidden;
+}
+.card__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--sp-3);
+  flex-wrap:wrap;
+  padding:var(--sp-4) var(--sp-4) var(--sp-3);
+  border-bottom:1px solid var(--line);
+}
+.card__title{
+  margin:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:1.05rem;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+.card__title::before{
+  content:"";
+  width:4px; height:18px;
+  border-radius:99px;
+  background:linear-gradient(var(--brand),var(--brand-2));
+}
+.card__hint{
+  font-size:.74rem;
+  font-weight:600;
+  color:var(--ink-soft);
 }
 
-.ok{
-    background:#c8f7c5;
+/* ---------------------------------------------------------
+   6. Selector de fecha
+   --------------------------------------------------------- */
+.select-wrap{ position:relative; display:inline-flex; }
+.select-wrap::after{
+  content:"";
+  position:absolute; right:13px; top:50%;
+  width:7px; height:7px;
+  border-right:2px solid var(--ink-soft);
+  border-bottom:2px solid var(--ink-soft);
+  transform:translateY(-65%) rotate(45deg);
+  pointer-events:none;
+}
+.select{
+  appearance:none; -webkit-appearance:none;
+  font:inherit; font-weight:650;
+  color:var(--ink);
+  background:var(--surface-2);
+  border:1px solid var(--line-2);
+  border-radius:var(--r-sm);
+  padding:8px 34px 8px 13px;
+  cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+}
+.select:hover{ border-color:var(--brand); }
+.select:focus-visible{
+  outline:none;
+  border-color:var(--brand);
+  box-shadow:0 0 0 3px var(--brand-bg);
 }
 
-.bad{
-    background:#ffcfcf;
+/* ---------------------------------------------------------
+   7. Tablas — base
+   --------------------------------------------------------- */
+.tabla-scroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.tabla-scroll table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:.9rem;
+}
+.tabla-scroll th,
+.tabla-scroll td{
+  padding:9px 12px;
+  text-align:center;
+  white-space:nowrap;
+  border-bottom:1px solid var(--line);
+}
+.tabla-scroll th{
+  background:var(--th-bg);
+  color:var(--th-ink);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.tabla-scroll tr:last-child td{ border-bottom:0; }
+
+/* Zebra (excluye podio para no pisar su color) */
+.tabla-scroll tr:nth-child(even):not(.top-1):not(.top-2):not(.top-3) td{
+  background:var(--surface-2);
+}
+/* Hover solo en desktop con puntero fino */
+@media (hover:hover) and (pointer:fine){
+  .tabla-scroll tbody tr:hover td{ background:var(--brand-bg); }
 }
 
-.pending{
-    background:#efefef;
+/* ---------------------------------------------------------
+   8. Ranking (general + fecha): Pos | Jugador | Puntos
+   --------------------------------------------------------- */
+#general td:first-child,  #general th:first-child,
+#fechaRanking td:first-child, #fechaRanking th:first-child{
+  width:54px;
+  color:var(--ink-soft);
+  font-variant-numeric:tabular-nums;
+}
+#general td:nth-child(2),  #general th:nth-child(2),
+#fechaRanking td:nth-child(2), #fechaRanking th:nth-child(2){
+  text-align:left;
+  font-weight:650;
+}
+#general td:last-child,
+#fechaRanking td:last-child{
+  width:82px;
+  font-weight:800;
+  color:var(--brand-2);
+  font-variant-numeric:tabular-nums;
 }
 
-select{
-    padding:8px;
-    margin-bottom:15px;
+/* Podio (top 3 puestos) */
+.top-1 td{ background:var(--gold-bg); }
+.top-2 td{ background:var(--silver-bg); }
+.top-3 td{ background:var(--bronze-bg); }
+.top-1 td:first-child{ box-shadow:inset 4px 0 0 var(--gold); }
+.top-2 td:first-child{ box-shadow:inset 4px 0 0 var(--silver); }
+.top-3 td:first-child{ box-shadow:inset 4px 0 0 var(--bronze); }
+.top-1 td:nth-child(2),
+.top-2 td:nth-child(2),
+.top-3 td:nth-child(2){ font-weight:800; }
+
+/* ---------------------------------------------------------
+   9. Pronósticos — grid denso con header + 1ra columna sticky
+   --------------------------------------------------------- */
+#pronosticos{
+  max-height:72vh;
+  overflow:auto;            /* scroll horizontal y vertical interno */
+}
+#pronosticos table{
+  width:max-content;
+  min-width:100%;
+  font-size:.82rem;
+}
+#pronosticos th,
+#pronosticos td{ border-right:1px solid var(--line); }
+
+/* Header sticky (fila de nombres) */
+#pronosticos th{
+  position:sticky; top:0; z-index:2;
+}
+/* Primera columna sticky (PARTIDO) */
+#pronosticos td:first-child,
+#pronosticos th:first-child{
+  position:sticky; left:0;
+  text-align:left;
+  font-weight:650;
+  min-width:138px; max-width:210px;
+  white-space:normal;       /* deja partir el nombre del partido en 2 líneas */
+}
+#pronosticos td:first-child{
+  z-index:1;
+  background:var(--surface);
+  box-shadow:1px 0 0 var(--line-2);
+}
+#pronosticos tr:nth-child(even) td:first-child{ background:var(--surface-2); }
+#pronosticos th:first-child{ z-index:3; }   /* esquina por encima de todo */
+
+/* Columna RES (resultado real) destacada */
+#pronosticos td:nth-child(2){
+  font-weight:800;
+  color:var(--brand-2);
+  background:var(--brand-bg);
+}
+
+/* Estados accesibles */
+#pronosticos td.ok{      background:var(--ok-bg);   color:var(--ok-ink);   font-weight:700; }
+#pronosticos td.bad{     background:var(--bad-bg);  color:var(--bad-ink); }
+#pronosticos td.pending{ background:var(--pend-bg); color:var(--pend-ink); }
+
+/* ---------------------------------------------------------
+   10. Mobile-first tweaks
+   --------------------------------------------------------- */
+@media (max-width:640px){
+  body{ font-size:14px; }
+  .wrap{ padding-inline:var(--sp-3); }
+  main.wrap{ padding-block:var(--sp-4) var(--sp-5); gap:var(--sp-4); }
+  .card{ border-radius:var(--r); }
+  .card__head{ padding:var(--sp-3); }
+  .card__title{ font-size:1rem; }
+  .brand__logo{ font-size:1.6rem; }
+
+  .tabla-scroll th,
+  .tabla-scroll td{ padding:7px 9px; }
+  #pronosticos table{ font-size:.78rem; }
+  #pronosticos td:first-child,
+  #pronosticos th:first-child{ min-width:116px; }
 }
