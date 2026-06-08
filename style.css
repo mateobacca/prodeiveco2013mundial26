@@ -297,11 +297,17 @@ main.wrap{
 #pronosticos tr:nth-child(even) td:first-child{ background:var(--surface-2); }
 #pronosticos th:first-child{ z-index:3; }   /* esquina por encima de todo */
 
-/* Columna RES (resultado real) destacada */
+/* Columna RES (resultado real): formato propio, distinto de aciertos/errores */
+#pronosticos th:nth-child(2){
+  background:var(--brand);
+  color:#fff;
+  border-inline:2px solid var(--brand-2);
+}
 #pronosticos td:nth-child(2){
   font-weight:800;
-  color:var(--brand-2);
-  background:var(--brand-bg);
+  color:var(--ink);
+  background:#e3e8ef;
+  border-inline:2px solid var(--line-2);
 }
 
 /* Estados accesibles */
