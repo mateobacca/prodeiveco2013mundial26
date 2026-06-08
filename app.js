@@ -128,15 +128,36 @@ async function cargarFecha(nombre){
 
     html += "<tr>";
 
-    fila.forEach(celda => {
+    const resultado = fila[1];
 
-      if(index === 0){
-        html += `<th>${celda}</th>`;
-      }else{
-        html += `<td>${celda}</td>`;
+fila.forEach((celda, colIndex) => {
+
+  if(index === 0){
+
+    html += `<th>${celda}</th>`;
+
+  }else{
+
+    let clase = "";
+
+    if(colIndex >= 2){
+
+      if(resultado === "L" ||
+         resultado === "E" ||
+         resultado === "V"){
+
+        if(celda === resultado){
+          clase = "ok";
+        }else{
+          clase = "bad";
+        }
       }
+    }
 
-    });
+    html += `<td class="${clase}">${celda}</td>`;
+  }
+
+});
 
     html += "</tr>";
 
