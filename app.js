@@ -1,3 +1,12 @@
+const SHEET_ID = "1RSSAMBkZoR6I1Pr7RkbAkLh4acx7eK7Nyx4LbSJYMic";
+
+const FECHAS = [
+  "Fecha 1",
+  "Fecha 2",
+  "Fecha 3",
+  "Play Off"
+];
+
 const general = {};
 
 async function cargarCSV(nombreHoja){
