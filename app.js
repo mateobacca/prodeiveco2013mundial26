@@ -121,6 +121,31 @@ async function cargarFecha(nombre){
   document.getElementById("fechaRanking")
     .innerHTML =
       tablaRanking(puntos);
+
+  let html = "<table>";
+
+  datos.forEach((fila, index) => {
+
+    html += "<tr>";
+
+    fila.forEach(celda => {
+
+      if(index === 0){
+        html += `<th>${celda}</th>`;
+      }else{
+        html += `<td>${celda}</td>`;
+      }
+
+    });
+
+    html += "</tr>";
+
+  });
+
+  html += "</table>";
+
+  document.getElementById("pronosticos")
+    .innerHTML = html;
 }
 
 document
