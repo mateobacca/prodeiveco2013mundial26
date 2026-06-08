@@ -7,6 +7,92 @@ const FECHAS = [
   "Play Off"
 ];
 
+// Países: código ISO (para la bandera de flagcdn en desktop) y abreviatura
+// de 3 letras (para mobile). La clave es el nombre tal como viene en la
+// planilla (incluye el typo "Agentina").
+const PAISES = {
+  "Agentina":           { codigo:"ar",     abbr:"ARG" },
+  "Argentina":          { codigo:"ar",     abbr:"ARG" },
+  "Alemania":           { codigo:"de",     abbr:"ALE" },
+  "Arabia Saudita":     { codigo:"sa",     abbr:"ARA" },
+  "Argelia":            { codigo:"dz",     abbr:"ALG" },
+  "Australia":          { codigo:"au",     abbr:"AUS" },
+  "Austria":            { codigo:"at",     abbr:"AUT" },
+  "Bosnia Herzegovina": { codigo:"ba",     abbr:"BOS" },
+  "Brasil":             { codigo:"br",     abbr:"BRA" },
+  "Bélgica":            { codigo:"be",     abbr:"BEL" },
+  "Cabo Verde":         { codigo:"cv",     abbr:"CAB" },
+  "Canadá":             { codigo:"ca",     abbr:"CAN" },
+  "Colombia":           { codigo:"co",     abbr:"COL" },
+  "Corea del Sur":      { codigo:"kr",     abbr:"COR" },
+  "Costa de Marfil":    { codigo:"ci",     abbr:"CDM" },
+  "Croacia":            { codigo:"hr",     abbr:"CRO" },
+  "Curazao":            { codigo:"cw",     abbr:"CUR" },
+  "Ecuador":            { codigo:"ec",     abbr:"ECU" },
+  "Egipto":             { codigo:"eg",     abbr:"EGI" },
+  "Escocia":            { codigo:"gb-sct", abbr:"ESC" },
+  "España":             { codigo:"es",     abbr:"ESP" },
+  "Estados Unidos":     { codigo:"us",     abbr:"USA" },
+  "Francia":            { codigo:"fr",     abbr:"FRA" },
+  "Ghana":              { codigo:"gh",     abbr:"GHA" },
+  "Haití":              { codigo:"ht",     abbr:"HAI" },
+  "Inglaterra":         { codigo:"gb-eng", abbr:"ING" },
+  "Irak":               { codigo:"iq",     abbr:"IRK" },
+  "Irán":               { codigo:"ir",     abbr:"IRN" },
+  "Japón":              { codigo:"jp",     abbr:"JAP" },
+  "Jordania":           { codigo:"jo",     abbr:"JOR" },
+  "Marruecos":          { codigo:"ma",     abbr:"MAR" },
+  "México":             { codigo:"mx",     abbr:"MEX" },
+  "Noruega":            { codigo:"no",     abbr:"NOR" },
+  "Nueva Zelanda":      { codigo:"nz",     abbr:"NZL" },
+  "Panamá":             { codigo:"pa",     abbr:"PAN" },
+  "Paraguay":           { codigo:"py",     abbr:"PAR" },
+  "Países Bajos":       { codigo:"nl",     abbr:"HOL" },
+  "Portugal":           { codigo:"pt",     abbr:"POR" },
+  "Qatar":              { codigo:"qa",     abbr:"QAT" },
+  "RD Congo":           { codigo:"cd",     abbr:"RDC" },
+  "República Checa":    { codigo:"cz",     abbr:"CHQ" },
+  "Senegal":            { codigo:"sn",     abbr:"SEN" },
+  "Sudáfrica":          { codigo:"za",     abbr:"SUD" },
+  "Suecia":             { codigo:"se",     abbr:"SUE" },
+  "Suiza":              { codigo:"ch",     abbr:"SUI" },
+  "Turquía":            { codigo:"tr",     abbr:"TUR" },
+  "Túnez":              { codigo:"tn",     abbr:"TUN" },
+  "Uruguay":            { codigo:"uy",     abbr:"URU" },
+  "Uzbekistán":         { codigo:"uz",     abbr:"UZB" }
+};
+
+// Devuelve el partido en dos versiones (CSS muestra una u otra según pantalla):
+//  - .partido-full  (desktop): [bandera] Local vs Visitante [bandera]
+//  - .partido-abbr  (mobile):  ABR vs ABR, sin bandera
+function formatPartido(texto){
+
+  const partes = texto.split(/\s+vs\.?\s+/i);
+
+  if(partes.length !== 2) return texto;
+
+  const local  = partes[0].trim();
+  const visita = partes[1].trim();
+  const L = PAISES[local]  || {};
+  const V = PAISES[visita] || {};
+
+  const bandera = (codigo) =>
+    codigo
+      ? `<img class="flag" src="https://flagcdn.com/${codigo}.svg" alt="" loading="lazy">`
+      : "";
+
+  const completo =
+    (L.codigo ? bandera(L.codigo) + " " : "") + local +
+    " vs " +
+    visita + (V.codigo ? " " + bandera(V.codigo) : "");
+
+  const abrev =
+    (L.abbr || local) + " vs " + (V.abbr || visita);
+
+  return `<span class="partido-full">${completo}</span>` +
+         `<span class="partido-abbr">${abrev}</span>`;
+}
+
 const general = {};
 
 async function cargarCSV(nombreHoja){
@@ -149,6 +235,10 @@ fila.forEach((celda, colIndex) => {
   if(index === 0){
 
     html += `<th>${celda}</th>`;
+
+  }else if(colIndex === 0){
+
+    html += `<td class="partido">${formatPartido(celda)}</td>`;
 
   }else{
 
