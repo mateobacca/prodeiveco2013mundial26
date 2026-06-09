@@ -95,8 +95,30 @@ main.wrap{
 .site-header .wrap{
   display:flex;
   align-items:center;
+  gap:var(--sp-3);
   padding-block:var(--sp-4);
 }
+
+/* Botón de navegación del header (calendario / volver) */
+.nav-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:42px;
+  height:42px;
+  font-size:1.3rem;
+  line-height:1;
+  text-decoration:none;
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:12px;
+  transition:background .15s,transform .1s;
+}
+.nav-btn:hover{ background:rgba(255,255,255,.28); }
+.nav-btn:active{ transform:scale(.93); }
+.nav-btn--end{ margin-left:auto; }   /* empuja el botón a la derecha */
 .brand{ display:flex; align-items:center; gap:var(--sp-3); }
 .brand__logo{
   font-size:2rem;
@@ -328,7 +350,96 @@ main.wrap{
 }
 
 /* ---------------------------------------------------------
-   10. Mobile-first tweaks
+   10. Calendario (fase de grupos + TV)
+   --------------------------------------------------------- */
+.cal-note{
+  margin:0 0 var(--sp-3);
+  font-size:.82rem;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+.cal__day-title{
+  margin:0;
+  padding:var(--sp-2) var(--sp-4);
+  background:var(--surface-2);
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  border-bottom:1px solid var(--line);
+}
+.match{
+  display:flex;
+  align-items:center;
+  gap:var(--sp-3);
+  padding:10px var(--sp-4);
+  border-bottom:1px solid var(--line);
+}
+.match:last-child{ border-bottom:0; }
+.match__time{
+  flex:none;
+  min-width:48px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  color:var(--brand-2);
+}
+.match__teams{
+  flex:1 1 auto;
+  min-width:0;
+  font-weight:650;
+}
+.match__vs{
+  margin:0 4px;
+  font-size:.85em;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+.match__channels{
+  flex:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:flex-end;
+}
+.chan{
+  display:inline-flex;
+  align-items:center;
+  padding:2px 9px;
+  font-size:.68rem;
+  font-weight:700;
+  white-space:nowrap;
+  color:var(--ink-soft);
+  background:var(--surface-2);
+  border:1px solid var(--line-2);
+  border-radius:999px;
+}
+/* Chip con logo de canal */
+.chan--logo{
+  gap:2px;
+  padding:3px 7px;
+  background:#fff;
+}
+.chan__img{
+  height:17px;
+  width:auto;
+  display:block;
+}
+.chan__badge{
+  font-size:.6rem;
+  font-weight:800;
+  line-height:1;
+  color:var(--ink-soft);
+}
+/* Partido de Argentina destacado */
+.match--arg{
+  background:var(--gold-bg);
+  box-shadow:inset 3px 0 0 var(--gold);
+}
+.match--arg .match__time{ color:var(--bronze); }
+
+/* ---------------------------------------------------------
+   11. Mobile-first tweaks
    --------------------------------------------------------- */
 @media (max-width:640px){
   body{ font-size:14px; }
@@ -351,5 +462,13 @@ main.wrap{
     min-width:78px;
     max-width:120px;
     white-space:nowrap;
+  }
+
+  /* Calendario: los canales bajan debajo del partido */
+  .match{ flex-wrap:wrap; }
+  .match__channels{
+    width:100%;
+    justify-content:flex-start;
+    padding-left:60px;
   }
 }
