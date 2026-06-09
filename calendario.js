@@ -7,13 +7,14 @@
 // Canales de TV. Por ahora solo el label (placeholder de texto);
 // los iconos se agregan después.
 const CANALES = {
-  dsports:     { label:"DSports" },
-  dsports2:    { label:"DSports 2" },
-  dsportsplus: { label:"DSports+" },
-  tyc:         { label:"TyC Sports" },
-  telefe:      { label:"Telefe" },
-  disney:      { label:"Disney+" },
-  tvp:         { label:"TV Pública" },
+  dsports:     { label:"DSports",    logo:"logos/dsports.png" },
+  dsports2:    { label:"DSports 2",  logo:"logos/dsports.png", badge:"2" },
+  dsportsplus: { label:"DSports+",   logo:"logos/dsports.png", badge:"+" },
+  tyc:         { label:"TyC Sports", logo:"logos/tycsports.png" },
+  telefe:      { label:"Telefe",     logo:"logos/telefe.png" },
+  disney:      { label:"Disney+",    logo:"logos/Disney.png" },
+  tvp:         { label:"TV Pública", logo:"logos/tvpublica.png" },
+  // Sin logo propio: chip de texto
   flow:        { label:"Flow Sports" },
   movistar:    { label:"Movistar" },
   red:         { label:"RED" }
@@ -154,9 +155,15 @@ function equipos(local, visita){
 }
 
 function chips(canales){
-  return canales
-    .map(c => `<span class="chan">${(CANALES[c] || { label:c }).label}</span>`)
-    .join("");
+  return canales.map(c => {
+    const info = CANALES[c] || { label:c };
+    if(info.logo){
+      const badge = info.badge ? `<span class="chan__badge">${info.badge}</span>` : "";
+      return `<span class="chan chan--logo chan--${c}" title="${info.label}">` +
+             `<img class="chan__img" src="${info.logo}" alt="${info.label}" loading="lazy">${badge}</span>`;
+    }
+    return `<span class="chan">${info.label}</span>`;
+  }).join("");
 }
 
 function render(){

@@ -414,6 +414,25 @@ main.wrap{
   border:1px solid var(--line-2);
   border-radius:999px;
 }
+/* Chip con logo de canal (PNG con tamaño intrínseco -> seguro en iOS) */
+.chan--logo{
+  gap:3px;
+  padding:3px 8px;
+  background:#fff;
+}
+.chan__img{
+  height:18px;
+  width:auto;
+  max-width:120px;
+  display:block;
+}
+.chan__badge{
+  font-size:.62rem;
+  font-weight:800;
+  line-height:1;
+  color:var(--ink-soft);
+}
+
 /* Partido de Argentina destacado */
 .match--arg{
   background:var(--gold-bg);
@@ -432,6 +451,10 @@ main.wrap{
   .card__head{ padding:var(--sp-3); }
   .card__title{ font-size:1rem; }
   .brand__logo{ font-size:1.6rem; }
+  /* Header compacto: titulo mas chico y boton arriba a la derecha */
+  .site-header .wrap{ align-items:flex-start; }
+  .brand{ min-width:0; }
+  .brand__title{ font-size:1.1rem; }
 
   .tabla-scroll th,
   .tabla-scroll td{ padding:7px 9px; }
@@ -452,6 +475,25 @@ main.wrap{
   .match__channels{
     width:100%;
     justify-content:flex-start;
+    gap:5px;
     padding-left:60px;
+  }
+  .chan{
+    padding:1px 7px;
+    font-size:.62rem;
+  }
+  .chan--logo{
+    padding:2px 6px;
+  }
+  .chan__img{
+    height:14px;
+    max-width:86px;
+  }
+  .chan--disney .chan__img{
+    height:18px;
+    max-width:78px;
+  }
+  .chan__badge{
+    font-size:.56rem;
   }
 }
