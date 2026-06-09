@@ -656,11 +656,6 @@ main.wrap{
   width:min(55vw,200px);
   height:auto;
   border-radius:var(--r-lg);
-  animation:loaderPulse 1.4s ease-in-out infinite;
-}
-@keyframes loaderPulse{
-  0%,100%{ transform:scale(1);    opacity:1;   }
-  50%    { transform:scale(1.04); opacity:.85; }
 }
 .loader__text{
   margin:0;
