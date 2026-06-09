@@ -10,33 +10,33 @@
   --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu,
           Cantarell, "Helvetica Neue", Arial, sans-serif;
 
-  /* Neutros */
-  --bg:        #eceff3;
+  /* Neutros — paleta clara: Almond Silk #EBD4CB · Iron Grey #4A5759 · Seagrass #2CA58D */
+  --bg:        #ebd4cb;   /* Almond Silk */
   --surface:   #ffffff;
-  --surface-2: #f4f7fa;   /* zebra */
-  --ink:       #0f172a;
-  --ink-soft:  #64748b;
-  --line:      #e6eaf0;
-  --line-2:    #d2dae3;
+  --surface-2: #f9efe9;   /* zebra (almond suave) */
+  --ink:       #2c3839;
+  --ink-soft:  #4a5759;   /* Iron Grey */
+  --line:      #efe0d9;
+  --line-2:    #e0cdc4;
 
-  /* Acento deportivo: verde "cancha" */
-  --brand:    #0f766e;
-  --brand-2:  #115e59;
-  --brand-bg: #ecfdf5;
+  /* Acento: verde "seagrass" */
+  --brand:    #2ca58d;    /* Seagrass */
+  --brand-2:  #1f8a74;
+  --brand-bg: #e2f4ee;
 
-  /* Header de tablas (oscuro) */
-  --th-bg:  #111827;
-  --th-ink: #e5e7eb;
+  /* Header de tablas (Iron Grey) */
+  --th-bg:  #4a5759;
+  --th-ink: #f2ece8;
 
   /* Estados (fondo suave + texto de alto contraste) */
-  --ok-bg:   #d4f4dd;  --ok-ink:   #14532d;
-  --bad-bg:  #fbdada;  --bad-ink:  #7f1d1d;
-  --pend-bg: #eef1f5;  --pend-ink: #6b7280;
+  --ok-bg:   #d2f0e4;  --ok-ink:   #11604a;
+  --bad-bg:  #f8d8d2;  --bad-ink:  #8a2f24;
+  --pend-bg: #efe5df;  --pend-ink: #6f6660;
 
   /* Podio */
-  --gold:   #d4a017;  --gold-bg:   #fdf6e0;
-  --silver: #8a97a8;  --silver-bg: #f2f5f8;
-  --bronze: #b5742a;  --bronze-bg: #fbeede;
+  --gold:   #c79a1e;  --gold-bg:   #f7edcb;
+  --silver: #8a97a8;  --silver-bg: #eef1f4;
+  --bronze: #b5742a;  --bronze-bg: #f4e2d2;
 
   /* Espaciado */
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
@@ -50,6 +50,55 @@
 
   /* Layout */
   --maxw: 920px;
+}
+
+/* ---------------------------------------------------------
+   1b. Modo oscuro
+   Paleta: Jet Black #253031 · Dark Slate Grey #315659 · Ash Grey #B3CBB9
+   --------------------------------------------------------- */
+[data-theme="dark"]{
+  --bg:        #253031;   /* Jet Black */
+  --surface:   #2d3a3b;
+  --surface-2: #344243;
+
+  --ink:       #e7efe9;
+  --ink-soft:  #b3cbb9;   /* Ash Grey */
+  --line:      #3a4849;
+  --line-2:    #4a5d5f;
+
+  --brand:    #5fa6a9;    /* slate-teal aclarado para que resalte */
+  --brand-2:  #315659;    /* Dark Slate Grey */
+  --brand-bg: #2b3f40;
+
+  --th-bg:  #1c2526;
+  --th-ink: #cdddd2;
+
+  --ok-bg:   #1f3b2b;  --ok-ink:   #9fe3b4;
+  --bad-bg:  #43282a;  --bad-ink:  #f1a6a6;
+  --pend-bg: #2d3a3b;  --pend-ink: #93a79d;
+
+  --gold:   #e2b13c;  --gold-bg:   #3a3318;
+  --silver: #aeb9c4;  --silver-bg: #313a3c;
+  --bronze: #cd8a44;  --bronze-bg: #3a2d1d;
+
+  --sh-sm: 0 1px 2px rgba(0,0,0,.40), 0 1px 1px rgba(0,0,0,.30);
+  --sh:    0 8px 24px -10px rgba(0,0,0,.70);
+}
+/* Fondos con color "hardcodeado" que hay que reemplazar en oscuro */
+[data-theme="dark"] body{
+  background:radial-gradient(1100px 520px at 50% -240px,#31494a 0%,var(--bg) 60%);
+}
+[data-theme="dark"] .site-header{
+  background:linear-gradient(135deg,#1d2728 0%,#315659 60%,#2a4a4c 100%);
+}
+[data-theme="dark"] .loader{
+  background:radial-gradient(1100px 520px at 50% -240px,#31494a 0%,var(--bg) 60%);
+}
+/* Columna RES de Pronósticos (tenía fondo claro fijo) */
+[data-theme="dark"] #pronosticos td:nth-child(2){
+  background:#3a4a4b;
+  color:var(--ink);
+  border-inline-color:var(--line-2);
 }
 
 /* ---------------------------------------------------------
@@ -88,7 +137,7 @@ main.wrap{
    4. Header / marca
    --------------------------------------------------------- */
 .site-header{
-  background:linear-gradient(135deg,#0b3b39 0%,#0f766e 55%,#115e59 100%);
+  background:linear-gradient(135deg,#34413f 0%,#2ca58d 70%,#1f8a74 100%);
   color:#fff;
   box-shadow:var(--sh);
 }
@@ -121,9 +170,29 @@ main.wrap{
 .nav-btn:active{ transform:scale(.93); }
 .nav-btn--end{ margin-left:auto; }   /* empuja el botón a la derecha */
 
+/* Botón de cambio de tema (claro / oscuro) */
+.theme-toggle{
+  margin-left:auto;       /* empuja los controles del header a la derecha */
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:42px;
+  height:42px;
+  font-size:1.2rem;
+  line-height:1;
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:12px;
+  cursor:pointer;
+  transition:background .15s,transform .1s;
+}
+.theme-toggle:hover{ background:rgba(255,255,255,.28); }
+.theme-toggle:active{ transform:scale(.93); }
+
 /* ---- Navegación principal (Home / Calendario / Especiales) ---- */
 .site-nav{
-  margin-left:auto;
   display:flex;
   gap:var(--sp-2);
 }
@@ -154,7 +223,6 @@ main.wrap{
 /* Botón hamburguesa (solo mobile) */
 .nav-toggle{
   display:none;          /* oculto en desktop */
-  margin-left:auto;
   width:42px;
   height:42px;
   align-items:center;
