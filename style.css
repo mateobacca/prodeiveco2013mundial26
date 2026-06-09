@@ -414,23 +414,6 @@ main.wrap{
   border:1px solid var(--line-2);
   border-radius:999px;
 }
-/* Chip con logo de canal */
-.chan--logo{
-  gap:2px;
-  padding:3px 7px;
-  background:#fff;
-}
-.chan__img{
-  height:17px;
-  width:auto;
-  display:block;
-}
-.chan__badge{
-  font-size:.6rem;
-  font-weight:800;
-  line-height:1;
-  color:var(--ink-soft);
-}
 /* Partido de Argentina destacado */
 .match--arg{
   background:var(--gold-bg);
