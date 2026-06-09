@@ -11,13 +11,13 @@
           Cantarell, "Helvetica Neue", Arial, sans-serif;
 
   /* Neutros — paleta clara: Almond Silk #EBD4CB · Iron Grey #4A5759 · Seagrass #2CA58D */
-  --bg:        #f4ece7;   /* Almond Silk muy suavizado (menos rosa) */
+  --bg:        #edf1f1;   /* gris claro neutro (familia Iron Grey, sin rosa) */
   --surface:   #ffffff;
-  --surface-2: #f8f2ee;   /* zebra (almond tenue) */
+  --surface-2: #f4f7f7;   /* zebra */
   --ink:       #2c3839;
   --ink-soft:  #4a5759;   /* Iron Grey */
-  --line:      #ece3dd;
-  --line-2:    #dcd0c8;
+  --line:      #e2e8e8;
+  --line-2:    #d0dada;
 
   /* Acento: verde "seagrass" */
   --brand:    #2ca58d;    /* Seagrass */
@@ -99,6 +99,18 @@
   background:#3a4a4b;
   color:var(--ink);
   border-inline-color:var(--line-2);
+}
+/* Acentos teal que sobre fondo oscuro quedan muy apagados: aclararlos */
+[data-theme="dark"] #general td:last-child,
+[data-theme="dark"] #fechaRanking td:last-child,
+[data-theme="dark"] .esp-tabla td:last-child,
+[data-theme="dark"] .match__time{
+  color:#7fc6c8;
+}
+[data-theme="dark"] .esp-pts{
+  color:#7fc6c8;
+  background:#2b3f40;
+  border-color:var(--line-2);
 }
 
 /* ---------------------------------------------------------
