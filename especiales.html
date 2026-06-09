@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Especiales · Prode Mundial | Iveco 2013</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="loader.js"></script>
+</head>
+<body>
+
+  <div id="loader" class="loader">
+    <div class="loader__box">
+      <img class="loader__img" src="img/carga.png" alt="">
+      <p class="loader__text">Cargando</p>
+      <div class="loader__bar"><span class="loader__fill"></span></div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <span class="brand__logo">⭐</span>
+        <div>
+          <h1 class="brand__title">Especiales</h1>
+          <p class="brand__subtitle">Predicciones del Mundial</p>
+        </div>
+      </div>
+      <button class="nav-toggle" aria-label="Menú" aria-expanded="false" aria-controls="site-nav">☰</button>
+      <nav class="site-nav" id="site-nav">
+        <a class="site-nav__link" href="index.html">🏆 Home</a>
+        <a class="site-nav__link" href="calendario.html">📅 Calendario</a>
+        <a class="site-nav__link is-active" href="especiales.html">⭐ Especiales</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="esp-note">⭐ Predicciones especiales · suman a la Tabla General</p>
+    <div id="especiales"></div>
+  </main>
+
+  <script src="especiales.js"></script>
+  <script src="nav.js"></script>
+
+</body>
+</html>

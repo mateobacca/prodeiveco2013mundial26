@@ -5,8 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Prode Mundial | Iveco 2013</title>
   <link rel="stylesheet" href="style.css">
+  <script src="loader.js"></script>
 </head>
 <body>
+
+  <div id="loader" class="loader">
+    <div class="loader__box">
+      <img class="loader__img" src="img/carga.png" alt="">
+      <p class="loader__text">Cargando</p>
+      <div class="loader__bar"><span class="loader__fill"></span></div>
+    </div>
+  </div>
 
   <header class="site-header">
     <div class="wrap">
@@ -17,7 +26,12 @@
           <p class="brand__subtitle">Pronósticos · Mundial 2026 ⭐⭐⭐</p>
         </div>
       </div>
-      <a class="nav-btn nav-btn--end" href="calendario.html" aria-label="Calendario y TV" title="Calendario y TV">📅</a>
+      <button class="nav-toggle" aria-label="Menú" aria-expanded="false" aria-controls="site-nav">☰</button>
+      <nav class="site-nav" id="site-nav">
+        <a class="site-nav__link is-active" href="index.html">🏆 Home</a>
+        <a class="site-nav__link" href="calendario.html">📅 Calendario</a>
+        <a class="site-nav__link" href="especiales.html">⭐ Especiales</a>
+      </nav>
     </div>
   </header>
 
@@ -26,7 +40,7 @@
     <section class="card">
       <div class="card__head">
         <h2 class="card__title">Tabla General</h2>
-        <span class="card__hint">Acumulado de todas las fechas</span>
+        <span class="card__hint">Acumulado de todas las fechas + especiales</span>
       </div>
       <div id="general" class="tabla-scroll"></div>
     </section>
@@ -57,6 +71,7 @@
   </main>
 
   <script src="app.js"></script>
+  <script src="nav.js"></script>
 
 </body>
 </html>

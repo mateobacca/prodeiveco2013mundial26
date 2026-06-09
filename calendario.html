@@ -10,7 +10,6 @@
 
   <header class="site-header">
     <div class="wrap">
-      <a class="nav-btn" href="index.html" aria-label="Volver al prode" title="Volver al prode">←</a>
       <div class="brand">
         <span class="brand__logo">📅</span>
         <div>
@@ -18,6 +17,12 @@
           <p class="brand__subtitle">Fase de grupos · TV en Argentina</p>
         </div>
       </div>
+      <button class="nav-toggle" aria-label="Menú" aria-expanded="false" aria-controls="site-nav">☰</button>
+      <nav class="site-nav" id="site-nav">
+        <a class="site-nav__link" href="index.html">🏆 Home</a>
+        <a class="site-nav__link is-active" href="calendario.html">📅 Calendario</a>
+        <a class="site-nav__link" href="especiales.html">⭐ Especiales</a>
+      </nav>
     </div>
   </header>
 
@@ -28,6 +33,7 @@
 
   <script src="paises.js"></script>
   <script src="calendario.js"></script>
+  <script src="nav.js"></script>
 
 </body>
 </html>

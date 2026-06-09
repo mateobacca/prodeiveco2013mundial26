@@ -185,6 +185,30 @@ function tablaRanking(puntos, opciones = {}){
   return html;
 }
 
+// Suma de los Puntos_obtenidos de la hoja "Especiales" por participante.
+// Hoja en formato largo: 0:Participante ... 5:Puntos_obtenidos
+async function puntosEspeciales(){
+
+  const datos = await cargarCSV("Especiales");
+
+  const total = {};
+
+  for(let i=1;i<datos.length;i++){
+
+    const fila = datos[i];
+    const jugador = fila[0];
+
+    if(!jugador) continue;
+
+    const pts = parseInt(fila[5],10);
+
+    if(!total[jugador]) total[jugador]=0;
+    if(!isNaN(pts)) total[jugador]+=pts;
+  }
+
+  return total;
+}
+
 async function cargarGeneral(){
 
   for(const fecha of FECHAS){
@@ -204,6 +228,19 @@ async function cargarGeneral(){
 
     });
   }
+
+  // Suma los puntos de las predicciones especiales al acumulado general.
+  const especiales = await puntosEspeciales();
+
+  Object.entries(especiales)
+    .forEach(([jugador,puntos])=>{
+
+    if(!general[jugador])
+      general[jugador]=0;
+
+    general[jugador]+=puntos;
+
+  });
 
   document.getElementById("general")
     .innerHTML =
@@ -285,8 +322,11 @@ document
 
 (async()=>{
 
-  await cargarGeneral();
-
-  await cargarFecha("Fecha 1");
+  try{
+    await cargarGeneral();
+    await cargarFecha("Fecha 1");
+  }finally{
+    if(window.Loader) window.Loader.done();
+  }
 
 })();

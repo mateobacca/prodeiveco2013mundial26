@@ -93,6 +93,7 @@ main.wrap{
   box-shadow:var(--sh);
 }
 .site-header .wrap{
+  position:relative;
   display:flex;
   align-items:center;
   gap:var(--sp-3);
@@ -119,6 +120,56 @@ main.wrap{
 .nav-btn:hover{ background:rgba(255,255,255,.28); }
 .nav-btn:active{ transform:scale(.93); }
 .nav-btn--end{ margin-left:auto; }   /* empuja el botón a la derecha */
+
+/* ---- Navegación principal (Home / Calendario / Especiales) ---- */
+.site-nav{
+  margin-left:auto;
+  display:flex;
+  gap:var(--sp-2);
+}
+.site-nav__link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  font-size:.85rem;
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
+  text-decoration:none;
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:12px;
+  transition:background .15s,transform .1s;
+}
+.site-nav__link:hover{ background:rgba(255,255,255,.28); }
+.site-nav__link:active{ transform:scale(.96); }
+.site-nav__link.is-active{
+  background:#fff;
+  color:var(--brand-2);
+  border-color:#fff;
+}
+
+/* Botón hamburguesa (solo mobile) */
+.nav-toggle{
+  display:none;          /* oculto en desktop */
+  margin-left:auto;
+  width:42px;
+  height:42px;
+  align-items:center;
+  justify-content:center;
+  font-size:1.4rem;
+  line-height:1;
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:12px;
+  cursor:pointer;
+  transition:background .15s,transform .1s;
+}
+.nav-toggle:hover{ background:rgba(255,255,255,.28); }
+.nav-toggle:active{ transform:scale(.93); }
 .brand{ display:flex; align-items:center; gap:var(--sp-3); }
 .brand__logo{
   font-size:2rem;
@@ -441,6 +492,120 @@ main.wrap{
 .match--arg .match__time{ color:var(--bronze); }
 
 /* ---------------------------------------------------------
+   10b. Especiales (una tabla por categoría)
+   --------------------------------------------------------- */
+.esp-note{
+  margin:0 0 var(--sp-3);
+  font-size:.82rem;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+/* Separación entre las tarjetas de categoría */
+#especiales{
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-5);
+}
+/* Puntaje posible de la categoría (chip en el head) */
+.esp-pts{
+  flex:none;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 9px;
+  font-size:.7rem;
+  font-weight:800;
+  color:var(--brand-2);
+  background:var(--brand-bg);
+  border:1px solid var(--line-2);
+  border-radius:999px;
+}
+/* Resultado real de la categoría (o "a definir") */
+.esp-result{
+  font-size:.74rem;
+  font-weight:700;
+  color:var(--ink-soft);
+}
+.esp-result strong{ color:var(--ink); }
+
+/* Tabla de categoría: Jugador | Predicción | Pts */
+.esp-tabla td:first-child,
+.esp-tabla th:first-child{
+  text-align:left;
+  font-weight:650;
+}
+.esp-tabla td:nth-child(2),
+.esp-tabla th:nth-child(2){ text-align:left; }
+.esp-tabla td:last-child,
+.esp-tabla th:last-child{
+  width:64px;
+  font-weight:800;
+  color:var(--brand-2);
+  font-variant-numeric:tabular-nums;
+}
+/* Predicción acertada */
+.esp-tabla td.ok{ background:var(--ok-bg); color:var(--ok-ink); font-weight:700; }
+.esp-tabla td.pending{ color:var(--ink-soft); }
+
+/* ---------------------------------------------------------
+   10c. Pantalla de carga
+   --------------------------------------------------------- */
+.loader{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(1100px 520px at 50% -240px,#ffffff 0%,var(--bg) 62%);
+  transition:opacity .4s ease;
+}
+.loader.is-hidden{
+  opacity:0;
+  pointer-events:none;
+}
+.loader__box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--sp-4);
+  padding:var(--sp-5);
+  text-align:center;
+}
+.loader__img{
+  width:min(55vw,200px);
+  height:auto;
+  border-radius:var(--r-lg);
+  animation:loaderPulse 1.4s ease-in-out infinite;
+}
+@keyframes loaderPulse{
+  0%,100%{ transform:scale(1);    opacity:1;   }
+  50%    { transform:scale(1.04); opacity:.85; }
+}
+.loader__text{
+  margin:0;
+  font-size:.95rem;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--brand-2);
+}
+.loader__bar{
+  width:min(70vw,240px);
+  height:8px;
+  background:var(--line-2);
+  border-radius:999px;
+  overflow:hidden;
+}
+.loader__fill{
+  display:block;
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
+}
+
+/* ---------------------------------------------------------
    11. Mobile-first tweaks
    --------------------------------------------------------- */
 @media (max-width:640px){
@@ -455,6 +620,32 @@ main.wrap{
   .site-header .wrap{ align-items:flex-start; }
   .brand{ min-width:0; }
   .brand__title{ font-size:1.1rem; }
+
+  /* Navegación: hamburguesa + menú desplegable */
+  .nav-toggle{ display:inline-flex; }
+  .site-nav{
+    position:absolute;
+    top:100%;
+    right:var(--sp-3);
+    margin-top:var(--sp-2);
+    flex-direction:column;
+    gap:6px;
+    padding:6px;
+    min-width:190px;
+    background:var(--brand-2);
+    border:1px solid rgba(255,255,255,.24);
+    border-radius:var(--r);
+    box-shadow:var(--sh);
+    display:none;          /* cerrado por defecto */
+    z-index:50;
+  }
+  .site-nav.is-open{ display:flex; }
+  .site-nav__link{
+    width:100%;
+    justify-content:flex-start;
+    font-size:.9rem;
+    padding:10px 12px;
+  }
 
   .tabla-scroll th,
   .tabla-scroll td{ padding:7px 9px; }
