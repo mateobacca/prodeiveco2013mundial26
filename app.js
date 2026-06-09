@@ -95,6 +95,16 @@ function formatPartido(texto){
 
 const general = {};
 
+function jugadoresDeFecha(datos){
+
+  const encabezados = datos[0] || [];
+
+  return encabezados
+    .slice(2)
+    .map(jugador => jugador.trim())
+    .filter(Boolean);
+}
+
 async function cargarCSV(nombreHoja){
 
   const url =
@@ -114,8 +124,7 @@ async function cargarCSV(nombreHoja){
 
 function calcularPuntos(datos){
 
-  const encabezados = datos[0];
-  const jugadores = encabezados.slice(2);
+  const jugadores = jugadoresDeFecha(datos);
 
   const puntos = {};
 
@@ -211,9 +220,16 @@ async function puntosEspeciales(){
 
 async function cargarGeneral(){
 
+  Object.keys(general).forEach(jugador => delete general[jugador]);
+
+  const jugadoresActivos = new Set();
+
   for(const fecha of FECHAS){
 
     const datos = await cargarCSV(fecha);
+
+    jugadoresDeFecha(datos)
+      .forEach(jugador => jugadoresActivos.add(jugador));
 
     const puntosFecha =
       calcularPuntos(datos);
@@ -234,6 +250,8 @@ async function cargarGeneral(){
 
   Object.entries(especiales)
     .forEach(([jugador,puntos])=>{
+
+    if(!jugadoresActivos.has(jugador)) return;
 
     if(!general[jugador])
       general[jugador]=0;
