@@ -144,6 +144,16 @@ const CALENDARIO = [
   }
 ];
 
+// Partido con banderas. Dos versiones (toggle por CSS): desktop con
+// nombres completos, mobile con abreviaturas. Bandera en ambas.
+function equipos(local, visita){
+  const bl = banderaImg(local), bv = banderaImg(visita);
+  const vs = `<span class="match__vs">vs</span>`;
+  const full = (bl ? bl + " " : "") + local + " " + vs + " " + visita + (bv ? " " + bv : "");
+  const abbr = (bl ? bl + " " : "") + abrevPais(local) + " " + vs + " " + abrevPais(visita) + (bv ? " " + bv : "");
+  return `<span class="partido-full">${full}</span><span class="partido-abbr">${abbr}</span>`;
+}
+
 function chips(canales){
   return canales.map(c => {
     const info = CANALES[c] || { label:c };
@@ -174,7 +184,7 @@ function render(){
       for(const p of d.partidos){
         html += `<div class="match${p.destacado ? " match--arg" : ""}">
           <span class="match__time">${p.hora}</span>
-          <span class="match__teams">${p.local} <span class="match__vs">vs</span> ${p.visita}</span>
+          <span class="match__teams">${equipos(p.local, p.visita)}</span>
           <span class="match__channels">${chips(p.canales)}</span>
         </div>`;
       }
