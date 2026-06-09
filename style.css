@@ -11,13 +11,13 @@
           Cantarell, "Helvetica Neue", Arial, sans-serif;
 
   /* Neutros — paleta clara: Almond Silk #EBD4CB · Iron Grey #4A5759 · Seagrass #2CA58D */
-  --bg:        #ebd4cb;   /* Almond Silk */
+  --bg:        #f4ece7;   /* Almond Silk muy suavizado (menos rosa) */
   --surface:   #ffffff;
-  --surface-2: #f9efe9;   /* zebra (almond suave) */
+  --surface-2: #f8f2ee;   /* zebra (almond tenue) */
   --ink:       #2c3839;
   --ink-soft:  #4a5759;   /* Iron Grey */
-  --line:      #efe0d9;
-  --line-2:    #e0cdc4;
+  --line:      #ece3dd;
+  --line-2:    #dcd0c8;
 
   /* Acento: verde "seagrass" */
   --brand:    #2ca58d;    /* Seagrass */
