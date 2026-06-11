@@ -7,7 +7,7 @@
 //  (Nota: la app principal tiene su propio mapa en app.js; si más
 //  adelante se quiere, se pueden unificar en este archivo.)
 // ============================================================
-const PAISES = {
+const PAISES_BANDERAS = {
   "Agentina":           { codigo:"ar",     abbr:"ARG" },
   "Argentina":          { codigo:"ar",     abbr:"ARG" },
   "Alemania":           { codigo:"de",     abbr:"ALE" },
@@ -63,7 +63,7 @@ const PAISES = {
 
 // <img> de la bandera (flagcdn) para un país, o "" si no se conoce.
 function banderaImg(nombre){
-  const p = PAISES[nombre];
+  const p = PAISES_BANDERAS[nombre];
   return (p && p.codigo)
     ? `<img class="flag" src="https://flagcdn.com/${p.codigo}.svg" alt="" loading="lazy">`
     : "";
@@ -71,6 +71,6 @@ function banderaImg(nombre){
 
 // Abreviatura de 3 letras (o el nombre si no se conoce).
 function abrevPais(nombre){
-  const p = PAISES[nombre];
+  const p = PAISES_BANDERAS[nombre];
   return (p && p.abbr) || nombre;
 }
