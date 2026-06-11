@@ -468,6 +468,22 @@ main.wrap{
 #pronosticos td.bad{     background:var(--bad-bg);  color:var(--bad-ink); }
 #pronosticos td.pending{ background:var(--pend-bg); color:var(--pend-ink); }
 
+/* Fila de totales (aciertos por jugador en la fecha) */
+#pronosticos tr.totales td{
+  border-top:2px solid var(--line-2);
+  font-weight:800;
+  background:var(--surface-2);
+  color:var(--brand-2);
+  font-variant-numeric:tabular-nums;
+}
+#pronosticos tr.totales td.partido{
+  color:var(--ink-soft);
+  text-transform:uppercase;
+  font-size:.72rem;
+  letter-spacing:.05em;
+}
+[data-theme="dark"] #pronosticos tr.totales td{ color:#7fc6c8; }
+
 /* Partido: completo en desktop, abreviado en mobile (toggle por media query) */
 .partido-abbr{ display:none; }
 
@@ -479,6 +495,91 @@ main.wrap{
   border-radius:2px;
   border:1px solid rgba(15,23,42,.12);
 }
+
+/* ---------------------------------------------------------
+   9b. Probabilidades — % L/E/V + quién votó qué
+   --------------------------------------------------------- */
+.prob{ display:flex; flex-direction:column; }
+
+.prob__row{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr) 56px minmax(0,1fr) 58px;
+  align-items:center;
+  gap:6px;
+  padding:8px 4px;
+  border-bottom:1px solid var(--line);
+}
+
+.prob__row--head{
+  padding-top:4px;
+  padding-bottom:4px;
+  background:var(--surface-2);
+  position:sticky; top:0; z-index:1;
+}
+.prob__th{
+  text-align:center;
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--ink-soft);
+}
+
+.prob__eq{
+  min-width:0;
+  font-weight:650;
+  font-size:.9rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.prob__eq--local{  text-align:right; }
+.prob__eq--visita{ text-align:left;  }
+
+.prob__pct{
+  font:inherit;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  cursor:pointer;
+  border:1px solid var(--line-2);
+  border-radius:var(--r-sm);
+  background:var(--surface-2);
+  color:var(--ink-soft);
+  padding:6px 2px;
+  transition:background .15s, color .15s, border-color .15s;
+}
+.prob__pct:hover{ border-color:var(--brand); color:var(--ink); }
+.prob__pct.is-fav{
+  background:var(--brand-bg);
+  color:var(--brand-2);
+  border-color:var(--brand);
+}
+.prob__pct.is-active{
+  background:var(--brand);
+  color:#fff;
+  border-color:var(--brand-2);
+}
+
+.prob__detail{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  padding:8px 10px 12px;
+  border-bottom:1px solid var(--line);
+  background:var(--surface-2);
+  font-size:.82rem;
+}
+.prob__detail-label{ font-weight:800; color:var(--ink-soft); }
+.prob__chip{
+  padding:3px 9px;
+  border-radius:999px;
+  background:var(--brand-bg);
+  color:var(--brand-2);
+  font-weight:700;
+  font-size:.75rem;
+}
+.prob__none{ color:var(--ink-soft); font-style:italic; }
+.prob__empty{ padding:var(--sp-4); color:var(--ink-soft); text-align:center; }
 
 /* ---------------------------------------------------------
    10. Calendario (fase de grupos + TV)
@@ -735,6 +836,11 @@ main.wrap{
     max-width:120px;
     white-space:nowrap;
   }
+
+  /* Probabilidades: columnas de % más angostas en mobile */
+  .prob__row{ grid-template-columns:50px minmax(0,1fr) 48px minmax(0,1fr) 50px; gap:5px; }
+  .prob__eq{ font-size:.84rem; }
+  .prob__pct{ font-size:.82rem; }
 
   /* Calendario: los canales bajan debajo del partido */
   .match{ flex-wrap:wrap; }

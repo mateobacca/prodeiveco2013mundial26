@@ -93,6 +93,33 @@ function formatPartido(texto){
          `<span class="partido-abbr">${abrev}</span>`;
 }
 
+// Un solo equipo con su bandera, para la tabla de Probabilidades.
+//  - lado "local":  bandera a la izquierda del nombre
+//  - lado "visita": bandera a la derecha del nombre
+// Igual que formatPartido, emite versión full (desktop) y abreviada (mobile).
+function equipoHTML(nombre, lado){
+
+  const P = PAISES[nombre] || {};
+
+  const bandera = P.codigo
+    ? `<img class="flag" src="https://flagcdn.com/${P.codigo}.svg" alt="" loading="lazy">`
+    : "";
+
+  const abbr = P.abbr || nombre;
+
+  const full = lado === "visita"
+    ? nombre + (bandera ? " " + bandera : "")
+    : (bandera ? bandera + " " : "") + nombre;
+
+  // En este cuadro también queremos la banderita en la versión compacta.
+  const corta = lado === "visita"
+    ? abbr + (bandera ? " " + bandera : "")
+    : (bandera ? bandera + " " : "") + abbr;
+
+  return `<span class="partido-full">${full}</span>` +
+         `<span class="partido-abbr">${corta}</span>`;
+}
+
 const general = {};
 
 function jugadoresDeFecha(datos){
@@ -324,17 +351,169 @@ fila.forEach((celda, colIndex) => {
 
   });
 
+  // Fila de totales: aciertos acumulados por jugador en esta fecha.
+  const jugadores = jugadoresDeFecha(datos);
+
+  html += "<tr class='totales'>";
+  html += "<td class='partido'>Aciertos</td>";
+  html += "<td></td>";                       // columna RES (sin total)
+
+  jugadores.forEach(jugador=>{
+    html += `<td>${puntos[jugador] ?? 0}</td>`;
+  });
+
+  html += "</tr>";
+
   html += "</table>";
 
   document.getElementById("pronosticos")
     .innerHTML = html;
 }
 
+// Tabla de Probabilidades: lee la hoja "<Fecha> %" (porcentaje L/E/V según la
+// sumatoria de pronósticos) y, cruzando con la hoja "<Fecha>", permite ver qué
+// participantes eligieron cada opción al tocar el valor.
+async function cargarProbabilidades(nombreFecha){
+
+  const cont = document.getElementById("probabilidades");
+
+  let pct, votos;
+
+  try{
+    [pct, votos] = await Promise.all([
+      cargarCSV(nombreFecha + " %"),
+      cargarCSV(nombreFecha)
+    ]);
+  }catch(e){
+    cont.innerHTML =
+      `<p class="prob__empty">No se pudieron cargar las probabilidades.</p>`;
+    return;
+  }
+
+  // ¿Existe la hoja "<Fecha> %" con datos?
+  const hayDatos =
+    pct && pct.length > 1 &&
+    pct[0] && pct[0][0] &&
+    pct[0][0].toUpperCase().includes("PARTIDO");
+
+  if(!hayDatos){
+    cont.innerHTML =
+      `<p class="prob__empty">Las probabilidades de ${nombreFecha} todavía no están cargadas.</p>`;
+    return;
+  }
+
+  // Mapa partido -> { L:[jugadores], E:[...], V:[...] }
+  const jugadores = jugadoresDeFecha(votos);
+  const votosPorPartido = {};
+
+  for(let i=1;i<votos.length;i++){
+
+    const fila = votos[i];
+    const partido = fila[0];
+
+    if(!partido) continue;
+
+    const m = { L:[], E:[], V:[] };
+
+    jugadores.forEach((jugador,idx)=>{
+      const v = fila[idx+2];
+      if(m[v]) m[v].push(jugador);
+    });
+
+    votosPorPartido[partido] = m;
+  }
+
+  let html = `
+    <div class="prob__row prob__row--head">
+      <div class="prob__th">L</div>
+      <div></div>
+      <div class="prob__th">E</div>
+      <div></div>
+      <div class="prob__th">V</div>
+    </div>
+  `;
+
+  for(let i=1;i<pct.length;i++){
+
+    const fila = pct[i];
+    const partido = fila[0];
+
+    if(!partido) continue;
+
+    const partes = partido.split(/\s+vs\.?\s+/i);
+    const local  = (partes[0] || "").trim();
+    const visita = (partes[1] || "").trim();
+
+    const L = fila[1] || "", E = fila[2] || "", V = fila[3] || "";
+
+    // resalta la opción más probable
+    const nums = [L,E,V].map(p => parseFloat(p) || 0);
+    const max  = Math.max(...nums);
+    const fav  = (n) => (n === max && max > 0) ? " is-fav" : "";
+
+    const m = votosPorPartido[partido] || { L:[], E:[], V:[] };
+    const data = (arr) => arr.join("|");
+
+    html += `
+      <div class="prob__row">
+        <button class="prob__pct prob__pct--l${fav(nums[0])}" data-opt="Local" data-voters="${data(m.L)}">${L}</button>
+        <div class="prob__eq prob__eq--local">${equipoHTML(local,"local")}</div>
+        <button class="prob__pct prob__pct--e${fav(nums[1])}" data-opt="Empate" data-voters="${data(m.E)}">${E}</button>
+        <div class="prob__eq prob__eq--visita">${equipoHTML(visita,"visita")}</div>
+        <button class="prob__pct prob__pct--v${fav(nums[2])}" data-opt="Visitante" data-voters="${data(m.V)}">${V}</button>
+      </div>
+      <div class="prob__detail" hidden></div>
+    `;
+  }
+
+  cont.innerHTML = `<div class="prob">${html}</div>`;
+}
+
+// Al tocar un porcentaje, despliega los participantes que eligieron esa opción.
+document
+.getElementById("probabilidades")
+.addEventListener("click", e=>{
+
+  const btn = e.target.closest(".prob__pct");
+  if(!btn) return;
+
+  const row = btn.closest(".prob__row");
+  const detail = row.nextElementSibling;
+
+  if(!detail || !detail.classList.contains("prob__detail")) return;
+
+  const yaActivo = btn.classList.contains("is-active") && !detail.hidden;
+
+  row.querySelectorAll(".prob__pct")
+     .forEach(b => b.classList.remove("is-active"));
+
+  if(yaActivo){
+    detail.hidden = true;
+    detail.innerHTML = "";
+    return;
+  }
+
+  btn.classList.add("is-active");
+
+  const opt = btn.dataset.opt;
+  const voters = (btn.dataset.voters || "").split("|").filter(Boolean);
+
+  const chips = voters.length
+    ? voters.map(v => `<span class="prob__chip">${v}</span>`).join("")
+    : `<span class="prob__none">Nadie</span>`;
+
+  detail.innerHTML =
+    `<span class="prob__detail-label">${opt} (${voters.length}):</span> ${chips}`;
+  detail.hidden = false;
+
+});
+
 document
 .getElementById("fechaSelect")
 .addEventListener("change",e=>{
 
   cargarFecha(e.target.value);
+  cargarProbabilidades(e.target.value);
 
 });
 
@@ -343,6 +522,7 @@ document
   try{
     await cargarGeneral();
     await cargarFecha("Fecha 1");
+    await cargarProbabilidades("Fecha 1");
   }finally{
     if(window.Loader) window.Loader.done();
   }
