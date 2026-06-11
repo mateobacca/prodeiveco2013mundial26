@@ -54,63 +54,59 @@
 
 /* ---------------------------------------------------------
    1b. Modo oscuro
-   Paleta: Jet Black #253031 · Dark Slate Grey #315659 · Ash Grey #B3CBB9
+   Paleta: Ink Black #0E131F · Ebony #697268 · Icy Blue #ADD9F4
+           Old Rose #DB7F8E · Green Yellow #C2F970
    --------------------------------------------------------- */
 [data-theme="dark"]{
-  --bg:        #253031;   /* Jet Black */
-  --surface:   #2d3a3b;
-  --surface-2: #344243;
+  --bg:        #0E131F;   /* Ink Black */
+  --surface:   #161d2b;
+  --surface-2: #1f2838;
 
-  --ink:       #e7efe9;
-  --ink-soft:  #b3cbb9;   /* Ash Grey */
-  --line:      #3a4849;
-  --line-2:    #4a5d5f;
+  --ink:       #e9eff6;
+  --ink-soft:  #99a39a;   /* Ebony aclarado para legibilidad */
+  --line:      #2b3343;
+  --line-2:    #3b4559;
 
-  --brand:    #5fa6a9;    /* slate-teal aclarado para que resalte */
-  --brand-2:  #315659;    /* Dark Slate Grey */
-  --brand-bg: #2b3f40;
+  --brand:    #C2F970;    /* Green Yellow — acento principal */
+  --brand-2:  #ADD9F4;    /* Icy Blue — acento claro (texto/números) */
+  --brand-bg: #1b2538;    /* azul-noche tenue (hover, chips) */
 
-  --th-bg:  #1c2526;
-  --th-ink: #cdddd2;
+  --th-bg:  #0a0f18;
+  --th-ink: #cfd8e2;
 
-  --ok-bg:   #1f3b2b;  --ok-ink:   #9fe3b4;
-  --bad-bg:  #43282a;  --bad-ink:  #f1a6a6;
-  --pend-bg: #2d3a3b;  --pend-ink: #93a79d;
+  --ok-bg:   #233a18;  --ok-ink:   #C2F970;   /* acierto = lima */
+  --bad-bg:  #3e2027;  --bad-ink:  #DB7F8E;   /* error = old rose */
+  --pend-bg: #1f2838;  --pend-ink: #8a93a2;
 
   --gold:   #e2b13c;  --gold-bg:   #3a3318;
-  --silver: #aeb9c4;  --silver-bg: #313a3c;
+  --silver: #aeb9c4;  --silver-bg: #2a3340;
   --bronze: #cd8a44;  --bronze-bg: #3a2d1d;
 
-  --sh-sm: 0 1px 2px rgba(0,0,0,.40), 0 1px 1px rgba(0,0,0,.30);
-  --sh:    0 8px 24px -10px rgba(0,0,0,.70);
+  --sh-sm: 0 1px 2px rgba(0,0,0,.45), 0 1px 1px rgba(0,0,0,.35);
+  --sh:    0 8px 24px -10px rgba(0,0,0,.75);
 }
 /* Fondos con color "hardcodeado" que hay que reemplazar en oscuro */
 [data-theme="dark"] body{
-  background:radial-gradient(1100px 520px at 50% -240px,#31494a 0%,var(--bg) 60%);
+  background:radial-gradient(1100px 520px at 50% -240px,#1a2742 0%,var(--bg) 60%);
 }
 [data-theme="dark"] .site-header{
-  background:linear-gradient(135deg,#1d2728 0%,#315659 60%,#2a4a4c 100%);
+  background:linear-gradient(135deg,#0E131F 0%,#1b2740 55%,#243049 100%);
 }
 [data-theme="dark"] .loader{
-  background:radial-gradient(1100px 520px at 50% -240px,#31494a 0%,var(--bg) 60%);
+  background:radial-gradient(1100px 520px at 50% -240px,#1a2742 0%,var(--bg) 60%);
 }
 /* Columna RES de Pronósticos (tenía fondo claro fijo) */
 [data-theme="dark"] #pronosticos td:nth-child(2){
-  background:#3a4a4b;
+  background:#1c2535;
   color:var(--ink);
   border-inline-color:var(--line-2);
 }
-/* Acentos teal que sobre fondo oscuro quedan muy apagados: aclararlos */
-[data-theme="dark"] #general td:last-child,
-[data-theme="dark"] #fechaRanking td:last-child,
-[data-theme="dark"] .esp-tabla td:last-child,
-[data-theme="dark"] .match__time{
-  color:#7fc6c8;
-}
-[data-theme="dark"] .esp-pts{
-  color:#7fc6c8;
-  background:#2b3f40;
-  border-color:var(--line-2);
+/* En oscuro los acentos (lima / icy blue) son CLAROS: cuando se usan como
+   fondo, el texto encima debe ir oscuro para que se lea. */
+[data-theme="dark"] #pronosticos th:nth-child(2),   /* RES sobre lima */
+[data-theme="dark"] .prob__pct.is-active,           /* % activo sobre lima */
+[data-theme="dark"] .site-nav__link.is-active{      /* pill activa (fondo #fff) */
+  color:#0E131F;
 }
 
 /* ---------------------------------------------------------
@@ -482,7 +478,6 @@ main.wrap{
   font-size:.72rem;
   letter-spacing:.05em;
 }
-[data-theme="dark"] #pronosticos tr.totales td{ color:#7fc6c8; }
 
 /* Partido: completo en desktop, abreviado en mobile (toggle por media query) */
 .partido-abbr{ display:none; }
@@ -816,6 +811,11 @@ main.wrap{
     z-index:50;
   }
   .site-nav.is-open{ display:flex; }
+  /* En oscuro el menú no puede usar el acento claro de fondo (texto blanco) */
+  [data-theme="dark"] .site-nav{
+    background:#161d2b;
+    border-color:rgba(255,255,255,.14);
+  }
   .site-nav__link{
     width:100%;
     justify-content:flex-start;
