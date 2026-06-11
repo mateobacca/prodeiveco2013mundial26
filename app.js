@@ -199,8 +199,9 @@ function tablaRanking(puntos, opciones = {}){
     // posición de competición: los empatados comparten puesto (1,1,1,4...)
     const pos = ranking.findIndex(r=>r[1]===pts) + 1;
 
-    // resalta el podio (top 3 puestos)
-    const clasePodio = pos <= 3 ? ` class="top-${pos}"` : "";
+    // resalta el podio (top 3 puestos), solo si ya hay puntos en juego
+    // (sin puntos están todos empatados en el 1° y no tiene sentido destacar)
+    const clasePodio = (pos <= 3 && pts > 0) ? ` class="top-${pos}"` : "";
 
     // ícono para el/los líderes (mayor puntaje, > 0): 🥇 fecha, 🏆 general
     const esLider = opciones.iconoLider && pts === maxPuntos && pts > 0;
