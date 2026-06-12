@@ -572,7 +572,7 @@ main.wrap{
   position:relative;
   z-index:1;
   display:grid;
-  grid-template-columns:minmax(150px,1fr) 62px 62px 62px minmax(150px,1fr);
+  grid-template-columns:minmax(172px,1fr) 62px 62px 62px minmax(172px,1fr);
   align-items:center;
   min-width:0;
   min-height:56px;
@@ -588,31 +588,29 @@ main.wrap{
 .live-team{
   position:relative;
   z-index:1;
-  display:flex;
+  display:grid;
   align-items:center;
-  justify-content:center;
-  gap:12px;
+  column-gap:12px;
   min-width:0;
   height:100%;
   padding-bottom:4px;
 }
-.live-team--home .flag{ position:absolute; left:0; }
-.live-team--home .live-team__dot{ position:absolute; left:58px; }
-.live-team--home .live-team__abbr{ left:calc(50% + 34px); }
-.live-team--away .live-team__abbr{ order:1; }
+.live-team--home{
+  grid-template-columns:auto auto minmax(0,1fr);
+}
+.live-team--home .flag{ grid-column:1; }
+.live-team--home .live-team__dot{ grid-column:2; }
+.live-team--home .live-team__abbr{ grid-column:3; }
+.live-team--away{
+  grid-template-columns:minmax(0,1fr) auto auto;
+}
+.live-team--away .live-team__abbr{ grid-column:1; }
 .live-team--away .live-team__dot{
-  position:absolute;
-  right:52px;
-  order:2;
+  grid-column:2;
   background:#f3d940;
   box-shadow:0 0 10px rgba(243,217,64,.85);
 }
-.live-team--away .flag{
-  position:absolute;
-  right:0;
-  order:3;
-}
-.live-team--away .live-team__abbr{ left:calc(50% - 34px); }
+.live-team--away .flag{ grid-column:3; }
 .live-team .flag{
   flex:none;
   height:28px;
@@ -629,9 +627,7 @@ main.wrap{
   box-shadow:0 0 10px rgba(47,192,165,.9);
 }
 .live-team__abbr{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
+  justify-self:center;
   min-width:0;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -642,6 +638,7 @@ main.wrap{
   line-height:.95;
   letter-spacing:.03em;
   text-shadow:0 2px 0 rgba(0,0,0,.6);
+  text-align:center;
 }
 .live-score__goal{
   position:relative;
@@ -1087,14 +1084,12 @@ main.wrap{
     font-size:1.15rem;
   }
   .live-score__board{
-    grid-template-columns:minmax(54px,1fr) 34px 36px 34px minmax(54px,1fr);
+    grid-template-columns:minmax(72px,1fr) 34px 36px 34px minmax(72px,1fr);
     min-height:40px;
     padding-inline:7px;
     border-radius:0 13px 13px 0;
   }
-  .live-team{ gap:4px; padding-bottom:3px; }
-  .live-team--home .live-team__dot{ left:23px; }
-  .live-team--away .live-team__dot{ right:23px; }
+  .live-team{ column-gap:4px; padding-bottom:3px; }
   .live-team .flag{
     height:16px;
     border-width:1px;
@@ -1104,8 +1099,6 @@ main.wrap{
     width:8px;
     height:8px;
   }
-  .live-team--home .live-team__abbr{ left:calc(50% + 16px); }
-  .live-team--away .live-team__abbr{ left:calc(50% - 16px); }
   .live-team__abbr{ font-size:1.02rem; letter-spacing:0; }
   .live-score__goal{
     font-size:1.45rem;

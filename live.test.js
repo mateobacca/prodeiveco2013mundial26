@@ -45,8 +45,11 @@ assert.deepStrictEqual(api.getLiveMatches({ results:[{ home_team:"Mexico", statu
 assert.deepStrictEqual(api.getLiveMatches({ events:[{ home_team:"Mexico", status:"inprogress" }] }), [{ home_team:"Mexico", status:"inprogress" }]);
 assert.deepStrictEqual(api.getLiveMatches({ count:0, events:[] }), []);
 assert.strictEqual(api.getLocalMockData().count, 1);
-assert.strictEqual(api.getLocalMockData().events[0].current_minute, 93);
-assert.strictEqual(api.getLocalMockData().events[0].home_score, 2);
+assert.strictEqual(api.getLocalMockData().events[0].current_minute, 51);
+assert.strictEqual(api.getLocalMockData().events[0].home_team, "Canada");
+assert.strictEqual(api.getLocalMockData().events[0].away_team, "Bosnia");
+assert.strictEqual(api.getLocalMockData().events[0].home_score, 0);
+assert.strictEqual(api.getLocalMockData().events[0].away_score, 1);
 
 context.location.hostname = "mateobacca.github.io";
 assert.strictEqual(api.getLocalMockData(), null);
@@ -54,6 +57,7 @@ context.location.hostname = "127.0.0.1";
 
 assert.strictEqual(api.toSpanishTeam("Mexico"), "M\u00e9xico");
 assert.strictEqual(api.toSpanishTeam("South Africa"), "Sud\u00e1frica");
+assert.strictEqual(api.toSpanishTeam("Bosnia"), "Bosnia");
 assert.strictEqual(api.toSpanishTeam("Korea Republic"), "Corea del Sur");
 assert.strictEqual(api.toSpanishTeam("C\u00f4te d'Ivoire"), "Costa de Marfil");
 assert.strictEqual(api.toSpanishTeam("Unknown FC"), null);
@@ -61,6 +65,10 @@ assert.strictEqual(api.toSpanishTeam("Unknown FC"), null);
 const known = api.formatTeam("Mexico");
 assert.strictEqual(known.abbr, "MEX");
 assert.ok(known.flag.includes("flagcdn.com/mx.svg"));
+
+const bosnia = api.formatTeam("Bosnia");
+assert.strictEqual(bosnia.abbr, "BOS");
+assert.ok(bosnia.flag.includes("flagcdn.com/ba.svg"));
 
 const unknown = api.formatTeam("Unknown FC");
 assert.strictEqual(unknown.abbr, "UNK");
