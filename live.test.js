@@ -90,6 +90,19 @@ assert.ok(html.includes("79&#039;"));
 assert.ok(html.includes("img/live-logo-26.png"));
 assert.ok(html.includes("live-score__logo"));
 
+const canadaBosniaHtml = api.renderMatches([{
+  home_team:"Canada",
+  away_team:"Bosnia",
+  home_score:0,
+  away_score:1,
+  current_minute:51,
+  period:"2nd_half"
+}]);
+const awayBlock = canadaBosniaHtml.match(/<span class="live-team live-team--away"[\s\S]*?<\/span>\s*<\/div>/)[0];
+assert.ok(awayBlock.includes("BOS"));
+assert.ok(awayBlock.includes("flagcdn.com/ba.svg"));
+assert.ok(/<span class="live-team__abbr">BOS<\/span>\s*<span class="live-team__dot"[\s\S]*flagcdn\.com\/ba\.svg/.test(awayBlock));
+
 api.setBanner([{
   home_team:"Mexico",
   away_team:"South Africa",

@@ -158,10 +158,14 @@
   }
 
   function renderTeam(team, side){
+    const dot = `<span class="live-team__dot" aria-hidden="true"></span>`;
+    const abbr = `<span class="live-team__abbr">${escapeHtml(team.abbr)}</span>`;
+    const content = side === "away"
+      ? `${abbr}${dot}${team.flag}`
+      : `${team.flag}${dot}${abbr}`;
+
     return `<span class="live-team live-team--${side}" title="${escapeHtml(team.name)}">
-      ${team.flag}
-      <span class="live-team__dot" aria-hidden="true"></span>
-      <span class="live-team__abbr">${escapeHtml(team.abbr)}</span>
+      ${content}
     </span>`;
   }
 
