@@ -2,6 +2,7 @@
   const LIVE_URL = "https://prode-live.cayefa.workers.dev/";
   const LOGO_URL = "img/live-logo-26.png";
   const POLL_MS = 30000;
+  const DEFAULT_TEAM_COLOR = "#8aa0a8";
   let warnedFetchError = false;
 
   const LOCAL_MOCK_DATA = {
@@ -11,15 +12,15 @@
       league_id:27,
       league_name:"World Cup 2026",
       home_team_id:451,
-      home_team:"Canada",
+      home_team:"Mexico",
       away_team_id:452,
-      away_team:"Bosnia",
+      away_team:"South Africa",
       event_date:"2026-06-11T19:00:00Z",
       status:"inprogress",
       period:"2nd_half",
-      current_minute:51,
-      home_score:0,
-      away_score:1,
+      current_minute:93,
+      home_score:2,
+      away_score:0,
       home_score_ht:1,
       away_score_ht:0,
       live_websocket:true,
@@ -138,13 +139,14 @@
     const spanishName = toSpanishTeam(englishName);
     if(!spanishName){
       console.warn("[live] Equipo sin mapeo EN\u2192ES:", englishName);
-      return { name:englishName || "Equipo", abbr:fallbackAbbr(englishName), flag:"" };
+      return { name:englishName || "Equipo", abbr:fallbackAbbr(englishName), flag:"", color:DEFAULT_TEAM_COLOR };
     }
 
     return {
       name:spanishName,
       abbr:LIVE_ABBR[englishName] || (typeof abrevPais === "function" ? abrevPais(spanishName) : fallbackAbbr(spanishName)),
-      flag:typeof banderaImg === "function" ? banderaImg(spanishName) : ""
+      flag:typeof banderaImg === "function" ? banderaImg(spanishName) : "",
+      color:(typeof colorPais === "function" ? colorPais(spanishName) : DEFAULT_TEAM_COLOR)
     };
   }
 
@@ -177,7 +179,7 @@
       const awayScore = Number.isFinite(match.away_score) ? match.away_score : 0;
       const score = `${homeScore} - ${awayScore}`;
 
-      return `<div class="live-score__match">
+      return `<div class="live-score__match" style="--home-color:${escapeHtml(home.color)};--away-color:${escapeHtml(away.color)}">
         <div class="live-score__minute" aria-label="Minuto ${escapeHtml(formatMinute(match))}">${escapeHtml(formatMinute(match))}</div>
         <div class="live-score__board">
           ${renderTeam(home, "home")}

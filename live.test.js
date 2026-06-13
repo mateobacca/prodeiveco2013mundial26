@@ -45,11 +45,11 @@ assert.deepStrictEqual(api.getLiveMatches({ results:[{ home_team:"Mexico", statu
 assert.deepStrictEqual(api.getLiveMatches({ events:[{ home_team:"Mexico", status:"inprogress" }] }), [{ home_team:"Mexico", status:"inprogress" }]);
 assert.deepStrictEqual(api.getLiveMatches({ count:0, events:[] }), []);
 assert.strictEqual(api.getLocalMockData().count, 1);
-assert.strictEqual(api.getLocalMockData().events[0].current_minute, 51);
-assert.strictEqual(api.getLocalMockData().events[0].home_team, "Canada");
-assert.strictEqual(api.getLocalMockData().events[0].away_team, "Bosnia");
-assert.strictEqual(api.getLocalMockData().events[0].home_score, 0);
-assert.strictEqual(api.getLocalMockData().events[0].away_score, 1);
+assert.strictEqual(api.getLocalMockData().events[0].current_minute, 93);
+assert.strictEqual(api.getLocalMockData().events[0].home_team, "Mexico");
+assert.strictEqual(api.getLocalMockData().events[0].away_team, "South Africa");
+assert.strictEqual(api.getLocalMockData().events[0].home_score, 2);
+assert.strictEqual(api.getLocalMockData().events[0].away_score, 0);
 
 context.location.hostname = "mateobacca.github.io";
 assert.strictEqual(api.getLocalMockData(), null);
@@ -65,6 +65,7 @@ assert.strictEqual(api.toSpanishTeam("Unknown FC"), null);
 const known = api.formatTeam("Mexico");
 assert.strictEqual(known.abbr, "MEX");
 assert.ok(known.flag.includes("flagcdn.com/mx.svg"));
+assert.strictEqual(known.color, "#006847");
 
 const bosnia = api.formatTeam("Bosnia");
 assert.strictEqual(bosnia.abbr, "BOS");
@@ -73,6 +74,7 @@ assert.ok(bosnia.flag.includes("flagcdn.com/ba.svg"));
 const unknown = api.formatTeam("Unknown FC");
 assert.strictEqual(unknown.abbr, "UNK");
 assert.strictEqual(unknown.flag, "");
+assert.strictEqual(unknown.color, "#8aa0a8");
 assert.ok(context.warnings.some(message => message.includes("Unknown FC")));
 
 const html = api.renderMatches([{
@@ -89,6 +91,8 @@ assert.ok(html.includes("2 - 0"));
 assert.ok(html.includes("79&#039;"));
 assert.ok(html.includes("img/live-logo-26.png"));
 assert.ok(html.includes("live-score__logo"));
+assert.ok(html.includes("--home-color:#006847"));
+assert.ok(html.includes("--away-color:#FCB917"));
 
 const canadaBosniaHtml = api.renderMatches([{
   home_team:"Canada",
