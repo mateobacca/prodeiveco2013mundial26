@@ -517,26 +517,40 @@ main.wrap{
   margin-inline:auto;
   filter:drop-shadow(0 10px 18px rgba(0,0,0,.18));
 }
-/* Bandeja de fondo con los colores del Mundial (fija, no por equipo):
-   sobresale por debajo y a ambos lados, y asoma en el hueco reloj/panel. */
+/* Dos contenedores apilados por detras (efecto de capas):
+   ::after = base clara (la mas atras, asoma como filo)
+   ::before = bandeja con los colores del Mundial (calidos local, frios visita)
+   Ambas sobresalen por debajo y a los lados, y asoman en el hueco reloj/panel. */
+.live-score__match::after{
+  content:"";
+  position:absolute;
+  z-index:-3;
+  top:-2px;
+  left:-13px;
+  right:-13px;
+  bottom:-13px;
+  border-radius:26px;
+  pointer-events:none;
+  background:#f2efe9;
+}
 .live-score__match::before{
   content:"";
   position:absolute;
-  z-index:0;
-  top:2px;
-  left:-7px;
-  right:-7px;
+  z-index:-2;
+  top:0;
+  left:-8px;
+  right:-8px;
   bottom:-9px;
-  border-radius:24px;
+  border-radius:22px;
   pointer-events:none;
   background:linear-gradient(90deg,
-    #FF5E84 0%,
-    #ED2748 16%,
-    #E11D24 38%,
+    #FF7A5C 0%,
+    #F23E2E 20%,
+    #E11D24 42%,
     #E11D24 50%,
-    #34DEC2 56%,
-    #5FE3CC 73%,
-    #9E7BEA 100%);
+    #2FD6AE 58%,
+    #59E0C6 73%,
+    #A98BE8 100%);
 }
 .live-score__minute{
   position:relative;
@@ -1032,11 +1046,18 @@ main.wrap{
     max-width:100%;
   }
   .live-score__match::before{
-    top:1px;
+    top:0;
     left:-5px;
     right:-5px;
     bottom:-6px;
-    border-radius:16px;
+    border-radius:15px;
+  }
+  .live-score__match::after{
+    top:-2px;
+    left:-9px;
+    right:-9px;
+    bottom:-9px;
+    border-radius:18px;
   }
   .live-score__minute{
     min-height:40px;
