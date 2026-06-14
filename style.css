@@ -1089,14 +1089,17 @@ main.wrap{
   background:linear-gradient(90deg,var(--brand),var(--brand-2));
 }
 /* Banner "HYDRATION BREAK": pill negro con borde multicolor (estilo Mundial),
-   fondo transparente. Va debajo de la barra de carga. */
+   fondo transparente. Fijo en el vértice inferior izquierdo de la pantalla. */
 .loader__banner{
-  margin-top:var(--sp-2);
+  position:fixed;
+  left:var(--sp-3);
+  bottom:var(--sp-3);
+  z-index:2;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:9px 22px;
-  border:5px solid transparent;
+  padding:5px 12px;
+  border:3px solid transparent;
   border-radius:999px;
   /* truco del borde con degradado: relleno negro (padding-box) + degradado
      cónico en el borde (border-box) -> azul arriba, verde der., rojo abajo, violeta izq. */
@@ -1113,11 +1116,11 @@ main.wrap{
   color:#fff;
   font-family:Impact,"Arial Black",var(--font);
   font-weight:900;
-  font-size:clamp(0.95rem,4.5vw,1.25rem);
-  letter-spacing:.04em;
+  font-size:clamp(0.65rem,2.6vw,0.8rem);
+  letter-spacing:.03em;
   text-transform:uppercase;
   white-space:nowrap;
-  box-shadow:0 8px 18px -10px rgba(0,0,0,.5);
+  box-shadow:0 6px 14px -8px rgba(0,0,0,.5);
 }
 
 /* ---------------------------------------------------------
