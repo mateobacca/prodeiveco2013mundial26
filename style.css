@@ -1095,8 +1095,8 @@ main.wrap{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:13px 32px;
-  border:6px solid transparent;
+  padding:9px 22px;
+  border:5px solid transparent;
   border-radius:999px;
   /* truco del borde con degradado: relleno negro (padding-box) + degradado
      cónico en el borde (border-box) -> azul arriba, verde der., rojo abajo, violeta izq. */
@@ -1113,11 +1113,11 @@ main.wrap{
   color:#fff;
   font-family:Impact,"Arial Black",var(--font);
   font-weight:900;
-  font-size:clamp(1.2rem,6vw,1.7rem);
-  letter-spacing:.05em;
+  font-size:clamp(0.95rem,4.5vw,1.25rem);
+  letter-spacing:.04em;
   text-transform:uppercase;
   white-space:nowrap;
-  box-shadow:0 10px 24px -10px rgba(0,0,0,.55);
+  box-shadow:0 8px 18px -10px rgba(0,0,0,.5);
 }
 
 /* ---------------------------------------------------------
