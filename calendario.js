@@ -168,6 +168,11 @@ function chips(canales){
 
 function render(){
 
+  // Otras páginas (p. ej. resultados.html) cargan este script solo para usar
+  // el global CALENDARIO; ahí no existe el contenedor y no hay nada que pintar.
+  const cont = document.getElementById("calendario");
+  if(!cont) return;
+
   let html = "";
 
   for(const f of CALENDARIO){
@@ -195,7 +200,7 @@ function render(){
     html += `</div></section>`;
   }
 
-  document.getElementById("calendario").innerHTML = html;
+  cont.innerHTML = html;
 }
 
 render();

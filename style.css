@@ -925,6 +925,118 @@ main.wrap{
 .esp-tabla td.pending{ color:var(--ink-soft); }
 
 /* ---------------------------------------------------------
+   10b-bis. Resultados (partidos terminados + chips)
+   --------------------------------------------------------- */
+.res-note{
+  margin:0 0 var(--sp-3);
+  font-size:.82rem;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+/* Separación entre las tarjetas por fecha */
+#resultados{
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-5);
+}
+.res-list{ display:flex; flex-direction:column; }
+
+/* Una fila por partido: marcador a la izquierda, chips a la derecha */
+.res-match{
+  display:grid;
+  grid-template-columns:minmax(320px,400px) minmax(0,1fr);
+  align-items:center;
+  gap:var(--sp-3);
+  padding:10px var(--sp-4);
+  border-bottom:1px solid var(--line);
+}
+.res-match:last-child{ border-bottom:0; }
+
+/* Marcador: bandera+nombre local | goles | nombre+bandera visita */
+.res-match__game{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:var(--sp-2);
+  font-weight:650;
+}
+.res-team{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.res-team--home{ justify-content:flex-end;  text-align:right; }
+.res-team--away{ justify-content:flex-start; text-align:left; }
+
+.res-score{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 11px;
+  font-weight:800;
+  font-size:1.05rem;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  background:var(--surface-2);
+  border:1px solid var(--line-2);
+  border-radius:var(--r-sm);
+}
+.res-score__n{ min-width:.9em; text-align:center; }
+.res-score__sep{ color:var(--ink-soft); font-weight:700; }
+
+/* Partido terminado pero sin marcador de la API: badge del resultado */
+.res-score--pending{ background:transparent; border:0; padding:0; }
+.res-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:28px;
+  padding:3px 8px;
+  font-size:.72rem;
+  font-weight:800;
+  color:var(--brand-2);
+  background:var(--brand-bg);
+  border:1px solid var(--line-2);
+  border-radius:999px;
+}
+
+/* Chips: verdes (pegaron) primero, rojos (erraron) después */
+.res-match__chips{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:5px;
+}
+.res-chip{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 9px;
+  font-size:.72rem;
+  font-weight:700;
+  white-space:nowrap;
+  border:1px solid transparent;
+  border-radius:999px;
+}
+.res-chip--ok{  background:var(--ok-bg);    color:var(--ok-ink); }
+.res-chip--bad{ background:var(--bad-bg);   color:var(--bad-ink); }
+.res-chip--none{ background:var(--surface-2); color:var(--ink-soft); }
+
+/* Sin partidos terminados todavía */
+.res-empty{
+  margin:0;
+  padding:var(--sp-5);
+  text-align:center;
+  color:var(--ink-soft);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+}
+
+/* ---------------------------------------------------------
    10c. Pantalla de carga
    --------------------------------------------------------- */
 .loader{
@@ -975,6 +1087,37 @@ main.wrap{
   width:0;
   border-radius:999px;
   background:linear-gradient(90deg,var(--brand),var(--brand-2));
+}
+/* Banner "HYDRATION BREAK": pill negro con borde multicolor (estilo Mundial),
+   fondo transparente. Va debajo de la barra de carga. */
+.loader__banner{
+  margin-top:var(--sp-2);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:13px 32px;
+  border:6px solid transparent;
+  border-radius:999px;
+  /* truco del borde con degradado: relleno negro (padding-box) + degradado
+     cónico en el borde (border-box) -> azul arriba, verde der., rojo abajo, violeta izq. */
+  background:
+    linear-gradient(#050505,#050505) padding-box,
+    conic-gradient(
+      #3B5BDB 0deg,
+      #2FD6AE 80deg,
+      #9BE800 125deg,
+      #E03131 200deg,
+      #C92A6A 250deg,
+      #7048E8 305deg,
+      #3B5BDB 360deg) border-box;
+  color:#fff;
+  font-family:Impact,"Arial Black",var(--font);
+  font-weight:900;
+  font-size:clamp(1.2rem,6vw,1.7rem);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  box-shadow:0 10px 24px -10px rgba(0,0,0,.55);
 }
 
 /* ---------------------------------------------------------
@@ -1128,4 +1271,13 @@ main.wrap{
   .chan__badge{
     font-size:.56rem;
   }
+
+  /* Resultados: marcador arriba, chips debajo */
+  .res-match{
+    grid-template-columns:1fr;
+    gap:var(--sp-2);
+    padding:10px var(--sp-3);
+  }
+  .res-score{ font-size:.95rem; padding:2px 9px; }
+  .res-chip{ padding:2px 8px; font-size:.68rem; }
 }
