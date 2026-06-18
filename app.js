@@ -62,6 +62,17 @@ const PAISES = {
   "Uzbekistán":         { codigo:"uz",     abbr:"UZB" }
 };
 
+// Alias de nombres de equipo: la planilla a veces escribe distinto un mismo
+// país (p. ej. "Catar"). Los unificamos al nombre canónico que figura en
+// PAISES para que coincida la bandera y se muestre siempre igual.
+const ALIAS_EQUIPO = {
+  "Catar": "Qatar"
+};
+
+function nombreCanonico(nombre){
+  return ALIAS_EQUIPO[(nombre || "").trim()] || nombre;
+}
+
 // Devuelve el partido en dos versiones (CSS muestra una u otra según pantalla):
 //  - .partido-full  (desktop): [bandera] Local vs Visitante [bandera]
 //  - .partido-abbr  (mobile):  ABR vs ABR, sin bandera
@@ -71,8 +82,8 @@ function formatPartido(texto){
 
   if(partes.length !== 2) return texto;
 
-  const local  = partes[0].trim();
-  const visita = partes[1].trim();
+  const local  = nombreCanonico(partes[0].trim());
+  const visita = nombreCanonico(partes[1].trim());
   const L = PAISES[local]  || {};
   const V = PAISES[visita] || {};
 
@@ -98,6 +109,8 @@ function formatPartido(texto){
 //  - lado "visita": bandera a la derecha del nombre
 // Igual que formatPartido, emite versión full (desktop) y abreviada (mobile).
 function equipoHTML(nombre, lado){
+
+  nombre = nombreCanonico(nombre);
 
   const P = PAISES[nombre] || {};
 
@@ -371,6 +384,19 @@ fila.forEach((celda, colIndex) => {
     .innerHTML = html;
 }
 
+// Normaliza el nombre de un partido para cruzar las hojas "<Fecha>" y
+// "<Fecha> %", que a veces escriben distinto a un mismo equipo (p. ej.
+// "Qatar" en una y "Catar" en la otra). Sin tildes, sin mayúsculas y sin
+// espacios de más, además de un par de alias conocidos.
+function normPartido(s){
+  return (s || "")
+    .toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/\bcatar\b/g, "qatar")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // Tabla de Probabilidades: lee la hoja "<Fecha> %" (porcentaje L/E/V según la
 // sumatoria de pronósticos) y, cruzando con la hoja "<Fecha>", permite ver qué
 // participantes eligieron cada opción al tocar el valor.
@@ -405,7 +431,8 @@ async function cargarProbabilidades(nombreFecha){
 
   // Mapa partido -> { L:[jugadores], E:[...], V:[...] }
   const jugadores = jugadoresDeFecha(votos);
-  const votosPorPartido = {};
+  const votosPorPartido = {};   // clave normalizada -> {L,E,V}
+  const votosPorOrden = [];     // mismo orden en que aparecen los partidos
 
   for(let i=1;i<votos.length;i++){
 
@@ -421,7 +448,8 @@ async function cargarProbabilidades(nombreFecha){
       if(m[v]) m[v].push(jugador);
     });
 
-    votosPorPartido[partido] = m;
+    votosPorPartido[normPartido(partido)] = m;
+    votosPorOrden.push(m);
   }
 
   let html = `
@@ -433,6 +461,8 @@ async function cargarProbabilidades(nombreFecha){
       <div class="prob__th">V</div>
     </div>
   `;
+
+  let orden = 0;
 
   for(let i=1;i<pct.length;i++){
 
@@ -452,7 +482,12 @@ async function cargarProbabilidades(nombreFecha){
     const max  = Math.max(...nums);
     const fav  = (n) => (n === max && max > 0) ? " is-fav" : "";
 
-    const m = votosPorPartido[partido] || { L:[], E:[], V:[] };
+    // Cruce por nombre normalizado; si la grafía difiere demasiado, cae al
+    // mismo orden de aparición (ambas hojas listan los partidos igual).
+    const m = votosPorPartido[normPartido(partido)] ||
+              votosPorOrden[orden] ||
+              { L:[], E:[], V:[] };
+    orden++;
     const data = (arr) => arr.join("|");
 
     html += `
