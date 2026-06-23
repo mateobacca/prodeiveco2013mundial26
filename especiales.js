@@ -87,6 +87,11 @@ function esPrediccionSinChance(valor){
   return normalizarTexto(valor) === "no";
 }
 
+function esValorChances(valor){
+  const v = normalizarTexto(valor);
+  return v === "si" || v === "no";
+}
+
 function indiceColumna(headers, nombre, fallback){
   const buscado = normalizarTexto(nombre);
   const index = (headers || []).findIndex(h => normalizarTexto(h) === buscado);
@@ -123,7 +128,9 @@ async function cargarEspeciales(){
     }
 
     const cat = categorias.get(categoria);
-    if(fila[idxResultado] && !cat.resultado) cat.resultado = fila[idxResultado];
+    if(fila[idxResultado] && !cat.resultado && !esValorChances(fila[idxResultado])){
+      cat.resultado = fila[idxResultado];
+    }
 
     const obtenidos = parseInt(fila[idxPuntosObtenidos], 10);
 
