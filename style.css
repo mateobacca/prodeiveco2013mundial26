@@ -867,6 +867,11 @@ main.wrap{
   box-shadow:inset 3px 0 0 var(--gold);
 }
 .match--arg .match__time{ color:var(--bronze); }
+.match--today{
+  background:var(--brand-bg);
+  box-shadow:inset 3px 0 0 var(--brand);
+}
+.match--today .match__time{ color:var(--brand-2); }
 
 /* ---------------------------------------------------------
    10b. Especiales (una tabla por categoría)
@@ -899,11 +904,29 @@ main.wrap{
 }
 /* Resultado real de la categoría (o "a definir") */
 .esp-result{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
   font-size:.74rem;
   font-weight:700;
   color:var(--ink-soft);
 }
 .esp-result strong{ color:var(--ink); }
+.esp-result .flag,
+.esp-pred .flag{
+  width:22px;
+  height:16px;
+  flex:none;
+  object-fit:cover;
+  border-radius:3px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.12);
+}
+.esp-pred{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
 
 /* Tabla de categoría: Jugador | Predicción | Pts */
 .esp-tabla td:first-child,
@@ -923,6 +946,17 @@ main.wrap{
 /* Predicción acertada */
 .esp-tabla td.ok{ background:var(--ok-bg); color:var(--ok-ink); font-weight:700; }
 .esp-tabla td.pending{ color:var(--ink-soft); }
+.esp-tabla td.out{
+  color:var(--bad-ink);
+  background:var(--bad-bg);
+  font-weight:700;
+  text-decoration:line-through;
+  text-decoration-thickness:2px;
+}
+.esp-tabla td.out .esp-pred span:last-child{
+  text-decoration:line-through;
+  text-decoration-thickness:2px;
+}
 
 /* ---------------------------------------------------------
    10b-bis. Resultados (partidos terminados + chips)
@@ -951,6 +985,10 @@ main.wrap{
   border-bottom:1px solid var(--line);
 }
 .res-match:last-child{ border-bottom:0; }
+.res-match--today{
+  background:var(--brand-bg);
+  box-shadow:inset 3px 0 0 var(--brand);
+}
 
 /* Marcador: bandera+nombre local | goles | nombre+bandera visita */
 .res-match__game{

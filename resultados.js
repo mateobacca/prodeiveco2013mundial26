@@ -26,6 +26,7 @@
 
   let warnedFetchError = false;
   let pollTimer = null;
+  let didTodayScroll = false;
 
   // Datos de prueba para estilar sin worker (solo en localhost con ?resMock=1).
   const RES_MOCK = {
@@ -78,6 +79,15 @@
   // Clave de partido (respeta orden local|visita).
   function matchKey(local, visita){
     return normalizeName(local) + "|" + normalizeName(visita);
+  }
+
+  function pad2(n){
+    return String(n).padStart(2, "0");
+  }
+
+  function todayKey(){
+    const hoy = new Date();
+    return `${hoy.getFullYear()}-${pad2(hoy.getMonth() + 1)}-${pad2(hoy.getDate())}`;
   }
 
   // EN->ES usando el mapa de live.js (al momento de llamar, no de cargar).
@@ -174,6 +184,7 @@
   function buildFinishedMatches(sheets, goals){
     const out = [];
     const mapaGoles = goals || {};
+    const mapaCalendario = indexCalendarMatches(calendario());
 
     (sheets || []).forEach(({ fecha, datos }) => {
       if(!datos || datos.length < 2) return;
@@ -202,10 +213,14 @@
           }
         }
 
+        const calInfo = mapaCalendario[matchKey(local, visita)] || {};
         out.push({
           fecha, local, visita, resultado, ok, bad,
           goals: tieneGoles ? { home: g.home, away: g.away } : null,
-          date: g && g.date ? g.date : null
+          date: g && g.date ? g.date : null,
+          diaKey: calInfo.diaKey || "",
+          dia: calInfo.dia || "",
+          hora: calInfo.hora || ""
         });
       }
     });
@@ -257,8 +272,11 @@
     return ok + bad;
   }
 
-  function matchRowHTML(m){
-    return `<div class="res-match">` +
+  function matchRowHTML(m, isTodayFirst){
+    const todayClass = isTodayFirst ? " res-match--today" : "";
+    const todayAttr = isTodayFirst ? ` data-today-first="1"` : "";
+    const dateAttr = m.diaKey ? ` data-date="${escapeHtml(m.diaKey)}"` : "";
+    return `<div class="res-match${todayClass}"${dateAttr}${todayAttr}>` +
       `<div class="res-match__game">` +
         `<span class="res-team res-team--home">${teamHTML(m.local, "local")}</span>` +
         scoreHTML(m) +
@@ -274,6 +292,8 @@
     }
     const order = [];
     const byFecha = {};
+    const hoy = todayKey();
+    let todayMarked = false;
     matches.forEach(m => {
       if(!byFecha[m.fecha]){ byFecha[m.fecha] = []; order.push(m.fecha); }
       byFecha[m.fecha].push(m);
@@ -286,7 +306,11 @@
           `<h2 class="card__title">${escapeHtml(fecha)}</h2>` +
           `<span class="card__hint">${hint}</span>` +
         `</div>` +
-        `<div class="res-list">${items.map(matchRowHTML).join("")}</div>` +
+        `<div class="res-list">${items.map(m => {
+          const isTodayFirst = !todayMarked && m.diaKey === hoy;
+          if(isTodayFirst) todayMarked = true;
+          return matchRowHTML(m, isTodayFirst);
+        }).join("")}</div>` +
       `</section>`;
     }).join("");
   }
@@ -294,6 +318,40 @@
   // ---- orquestacion + refresh ------------------------------------------
   function calendario(){
     return typeof CALENDARIO !== "undefined" ? CALENDARIO : [];
+  }
+
+  function fechaCalendarioKey(dia){
+    const helper = typeof window !== "undefined" && window.ProdeCalendario && window.ProdeCalendario.fechaCalendarioKey;
+    if(helper) return helper(dia);
+    const m = /(\d{1,2})\/(\d{1,2})/.exec(dia || "");
+    if(!m) return "";
+    return `2026-${pad2(m[2])}-${pad2(m[1])}`;
+  }
+
+  function indexCalendarMatches(cal){
+    const map = {};
+    (cal || []).forEach(f => (f.dias || []).forEach(d => {
+      const diaKey = fechaCalendarioKey(d.dia);
+      (d.partidos || []).forEach(p => {
+        map[matchKey(p.local, p.visita)] = {
+          diaKey,
+          dia: d.dia,
+          hora: p.hora
+        };
+      });
+    }));
+    return map;
+  }
+
+  function scrollToTodayMatch(){
+    if(didTodayScroll) return;
+    const cont = document.getElementById("resultados");
+    const target = cont && cont.querySelector("[data-today-first='1']");
+    if(!target) return;
+    didTodayScroll = true;
+    setTimeout(() => {
+      target.scrollIntoView({ behavior:"smooth", block:"center" });
+    }, 80);
   }
 
   // Arma los horarios de inicio (en instante UTC) desde CALENDARIO.
@@ -338,6 +396,7 @@
     try{
       const sheets = await cargarHojas();
       cont.innerHTML = renderHTML(buildFinishedMatches(sheets, goals));
+      scrollToTodayMatch();
     }catch(error){
       console.warn("[resultados] No se pudo cargar la planilla:", error);
       cont.innerHTML = `<p class="res-empty">No se pudieron cargar los resultados.</p>`;
@@ -376,7 +435,8 @@
     renderHTML,
     matchRowHTML,
     isWithinMatchWindow,
-    parseKickoffsUTC
+    parseKickoffsUTC,
+    indexCalendarMatches
   };
 
   if(typeof document !== "undefined"){

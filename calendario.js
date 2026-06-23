@@ -144,6 +144,31 @@ const CALENDARIO = [
   }
 ];
 
+const CALENDARIO_YEAR = 2026;
+
+function pad2(n){
+  return String(n).padStart(2, "0");
+}
+
+function todayKey(){
+  const hoy = new Date();
+  return `${hoy.getFullYear()}-${pad2(hoy.getMonth() + 1)}-${pad2(hoy.getDate())}`;
+}
+
+function fechaCalendarioKey(dia){
+  const m = /(\d{1,2})\/(\d{1,2})/.exec(dia || "");
+  if(!m) return "";
+  return `${CALENDARIO_YEAR}-${pad2(m[2])}-${pad2(m[1])}`;
+}
+
+function scrollToTodayMatch(root){
+  const target = root && root.querySelector("[data-today-first='1']");
+  if(!target) return;
+  setTimeout(() => {
+    target.scrollIntoView({ behavior:"smooth", block:"center" });
+  }, 80);
+}
+
 // Partido con banderas. Dos versiones (toggle por CSS): desktop con
 // nombres completos, mobile con abreviaturas. Bandera en ambas.
 function equipos(local, visita){
@@ -174,6 +199,8 @@ function render(){
   if(!cont) return;
 
   let html = "";
+  const hoy = todayKey();
+  let todayMarked = false;
 
   for(const f of CALENDARIO){
 
@@ -186,8 +213,18 @@ function render(){
       html += `<div class="cal__day">
         <h3 class="cal__day-title">${d.dia}</h3>`;
 
+      const diaKey = fechaCalendarioKey(d.dia);
       for(const p of d.partidos){
-        html += `<div class="match${p.destacado ? " match--arg" : ""}">
+        const isTodayFirst = !todayMarked && diaKey === hoy;
+        if(isTodayFirst) todayMarked = true;
+        const classes = [
+          "match",
+          p.destacado ? "match--arg" : "",
+          isTodayFirst ? "match--today" : ""
+        ].filter(Boolean).join(" ");
+        const todayAttr = isTodayFirst ? ` data-today-first="1"` : "";
+
+        html += `<div class="${classes}" data-date="${diaKey}"${todayAttr}>
           <span class="match__time">${p.hora}</span>
           <span class="match__teams">${equipos(p.local, p.visita)}</span>
           <span class="match__channels">${chips(p.canales)}</span>
@@ -201,6 +238,14 @@ function render(){
   }
 
   cont.innerHTML = html;
+  scrollToTodayMatch(cont);
 }
 
 render();
+
+window.ProdeCalendario = {
+  CALENDARIO,
+  fechaCalendarioKey,
+  todayKey,
+  scrollToTodayMatch
+};

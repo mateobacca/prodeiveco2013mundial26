@@ -48,6 +48,7 @@ const PAISES_BANDERAS = {
   "Nueva Zelanda":      { codigo:"nz",     abbr:"NZL", color:"#E9E9E9" },
   "Panamá":             { codigo:"pa",     abbr:"PAN", color:"#D21034" },
   "Paraguay":           { codigo:"py",     abbr:"PAR", color:"#D52B1E" },
+  "Paises Bajos":       { codigo:"nl",     abbr:"HOL", color:"#FF7900" },
   "Países Bajos":       { codigo:"nl",     abbr:"HOL", color:"#FF7900" },
   "Portugal":           { codigo:"pt",     abbr:"POR", color:"#DA291C" },
   "Qatar":              { codigo:"qa",     abbr:"QAT", color:"#8A1538" },
