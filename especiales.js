@@ -1,8 +1,7 @@
 const SHEET_ID = "1RSSAMBkZoR6I1Pr7RkbAkLh4acx7eK7Nyx4LbSJYMic";
 
-// Estructura de la hoja "Especiales" (formato largo):
-//  0:Participante 1:Categoria 2:Prediccion 3:Resultado 4:Puntos_posibles 5:Puntos_obtenidos
-//  6:Chances opcional ("Si" / "No"). Las "No" se muestran tachadas.
+// Estructura de la hoja "Especiales" (formato largo). Se leen columnas por
+// encabezado para que "Chances" no altere puntos si cambia de posicion.
 
 async function cargarCSV(nombreHoja){
   const url =
@@ -85,17 +84,7 @@ function resultadoConBandera(resultado){
 }
 
 function esPrediccionSinChance(valor){
-  const estado = normalizarTexto(valor);
-  if(estado === "si") return false;
-  return estado === "sinchance" ||
-    estado === "tachado" ||
-    estado === "eliminado" ||
-    estado === "eliminada" ||
-    estado === "afuera" ||
-    estado === "no" ||
-    estado === "x" ||
-    estado === "true" ||
-    estado === "1";
+  return normalizarTexto(valor) === "no";
 }
 
 function indiceColumna(headers, nombre, fallback){
@@ -108,6 +97,12 @@ async function cargarEspeciales(){
 
   const datos = await cargarCSV("Especiales");
   const headers = datos[0] || [];
+  const idxParticipante = indiceColumna(headers, "Participante", 0);
+  const idxCategoria = indiceColumna(headers, "Categoria", 1);
+  const idxPrediccion = indiceColumna(headers, "Prediccion", 2);
+  const idxResultado = indiceColumna(headers, "Resultado", 3);
+  const idxPuntosPosibles = indiceColumna(headers, "Puntos_posibles", 4);
+  const idxPuntosObtenidos = indiceColumna(headers, "Puntos_obtenidos", 5);
   const idxChances = indiceColumna(headers, "Chances", 6);
 
   // Agrupa por categoría preservando el orden de aparición.
@@ -115,26 +110,26 @@ async function cargarEspeciales(){
 
   for(let i = 1; i < datos.length; i++){
     const fila = datos[i];
-    const participante = fila[0];
-    const categoria    = fila[1];
+    const participante = fila[idxParticipante];
+    const categoria    = fila[idxCategoria];
     if(!participante || !categoria) continue;
 
     if(!categorias.has(categoria)){
       categorias.set(categoria, {
-        posibles: parseInt(fila[4], 10) || 0,
+        posibles: parseInt(fila[idxPuntosPosibles], 10) || 0,
         resultado: "",
         filas: []
       });
     }
 
     const cat = categorias.get(categoria);
-    if(fila[3] && !cat.resultado) cat.resultado = fila[3];
+    if(fila[idxResultado] && !cat.resultado) cat.resultado = fila[idxResultado];
 
-    const obtenidos = parseInt(fila[5], 10);
+    const obtenidos = parseInt(fila[idxPuntosObtenidos], 10);
 
     cat.filas.push({
       participante,
-      prediccion: fila[2],
+      prediccion: fila[idxPrediccion],
       obtenidos: isNaN(obtenidos) ? 0 : obtenidos,
       sinChance: esPrediccionSinChance(fila[idxChances])
     });
@@ -167,7 +162,7 @@ async function cargarEspeciales(){
 
     filas.forEach(f => {
       const acierto = f.obtenidos > 0;
-      const clase = acierto ? "ok" : (f.sinChance ? "out" : (f.prediccion ? "" : "pending"));
+      const clase = f.sinChance ? "out" : (acierto ? "ok" : (f.prediccion ? "" : "pending"));
       const pred = prediccionConBandera(f.prediccion);
 
       html += `

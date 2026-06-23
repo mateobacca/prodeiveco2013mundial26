@@ -947,8 +947,8 @@ main.wrap{
 .esp-tabla td.ok{ background:var(--ok-bg); color:var(--ok-ink); font-weight:700; }
 .esp-tabla td.pending{ color:var(--ink-soft); }
 .esp-tabla td.out{
-  color:var(--bad-ink);
-  background:var(--bad-bg);
+  color:#8a2f24;
+  background:transparent;
   font-weight:700;
   text-decoration:line-through;
   text-decoration-thickness:2px;

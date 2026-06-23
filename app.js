@@ -156,10 +156,24 @@ async function cargarCSV(nombreHoja){
     .trim()
     .split("\n")
     .map(f =>
-      f.split(",").map(celda => celda.trim().replace(/^"|"$/g, ""))
+      f.split(",").map(celda => celda.trim().replace(/^"|"$/g, "").trim())
     );
 
   return filas;
+}
+
+function normalizarHeader(s){
+  return (s || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function indiceColumna(headers, nombre, fallback){
+  const buscado = normalizarHeader(nombre);
+  const index = (headers || []).findIndex(h => normalizarHeader(h) === buscado);
+  return index >= 0 ? index : fallback;
 }
 
 function calcularPuntos(datos){
@@ -236,21 +250,24 @@ function tablaRanking(puntos, opciones = {}){
 }
 
 // Suma de los Puntos_obtenidos de la hoja "Especiales" por participante.
-// Hoja en formato largo: 0:Participante ... 5:Puntos_obtenidos
+// Se lee por encabezado para que columnas auxiliares como "Chances" no sumen.
 async function puntosEspeciales(){
 
   const datos = await cargarCSV("Especiales");
+  const headers = datos[0] || [];
+  const idxParticipante = indiceColumna(headers, "Participante", 0);
+  const idxPuntosObtenidos = indiceColumna(headers, "Puntos_obtenidos", 5);
 
   const total = {};
 
   for(let i=1;i<datos.length;i++){
 
     const fila = datos[i];
-    const jugador = fila[0];
+    const jugador = fila[idxParticipante];
 
     if(!jugador) continue;
 
-    const pts = parseInt(fila[5],10);
+    const pts = parseInt(fila[idxPuntosObtenidos],10);
 
     if(!total[jugador]) total[jugador]=0;
     if(!isNaN(pts)) total[jugador]+=pts;
