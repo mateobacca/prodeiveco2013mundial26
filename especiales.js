@@ -65,9 +65,7 @@ function prediccionConBandera(prediccion){
   const tipo = jugadorPais ? "jugador" : "pais";
   const label = esc(prediccion);
 
-  return bandera
-    ? `<span class="esp-pred esp-pred--${tipo}">${bandera}<span>${label}</span></span>`
-    : label;
+  return `<span class="esp-pred esp-pred--${tipo}">${bandera}<span class="esp-pred__text">${label}</span></span>`;
 }
 
 function resultadoConBandera(resultado){
