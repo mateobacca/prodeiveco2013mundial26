@@ -574,8 +574,8 @@ document
 
   try{
     await cargarGeneral();
-    await cargarFecha("Fecha 2");
-    await cargarProbabilidades("Fecha 2");
+    await cargarFecha("Fecha 3");
+    await cargarProbabilidades("Fecha 3");
   }finally{
     if(window.Loader) window.Loader.done();
   }
